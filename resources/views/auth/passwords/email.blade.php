@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="nsh-card-center mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title"><h2 class="mdl-card__title-text">Reset Password</h2></div>
+                <div class="mdl-card__title mdl-color--primary mdl-color-text--white"><h2 class="mdl-card__title-text">Reset Password</h2></div>
                 <div class="nsh-card-content">
                     @if (session('status'))
                         <div class="alert alert-success">

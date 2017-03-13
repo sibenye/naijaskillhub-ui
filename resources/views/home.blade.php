@@ -8,15 +8,17 @@
   <div class="nsh-navigation-transparent">
     <div class="nsh-navigation-row">
       <!-- Title -->
-      <span class="nsh-navigation-title">Title</span>
+      <span class="nsh-navigation-title">
+        <img width=300 height=70 alt="Brand" src="{{ asset('images/nsh_logo_transparent.png') }}">
+      </span>
 
       <nav class="nsh-navigation-menu-section">
-        @if (Auth::check())
-            <a href="{{ url('/home') }}">Home</a>
-        @else
-            <a class="nsh-navigation-menu-section-item" href="{{ url('/register') }}">Join Free</a>
-            <a class="nsh-navigation-menu-section-item" href="{{ url('/login') }}">Log In</a>
-        @endif
+      <div>
+        <ul class="nsh-navigation-menu-section-item">
+				@component('components.navbaritems')
+				@endcomponent
+			</ul>
+        </div>
       </nav>
     </div>
   </div>
@@ -26,7 +28,7 @@
         Find the Right Talent
     </div>
 
-    <div><button class="btn btn-primary" type="submit">Search</button></div>
+    <div><button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-button--raised" type="submit">Search</button></div>
   </div>
 </div>
 <div class="page-content"><!-- Your content goes here -->

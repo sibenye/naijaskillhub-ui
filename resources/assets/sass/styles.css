@@ -1,5 +1,5 @@
 html, body {
-    background-color: #fff;
+    background-color: #ffffff;
     color: #636b6f;
     font-family: 'Raleway', sans-serif;
     font-weight: 100;
@@ -7,15 +7,45 @@ html, body {
     margin: 0;
 }
 
-/**
-* Bootstrap Overrides begin
-*/
+/* Bootstrap Overrides begin */
+
+a {
+    color: #673AB7;
+    text-decoration: none;
+}
+
 label {
     font-weight: normal !important;
 }
-/**
-* Bootstrap Overrides end
-*/
+
+.navbar {
+    min-height: 80px;
+}
+
+.navbar-default .navbar-nav li a {
+    color: #673AB7;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.btn-link {
+    color: #673AB7;
+}
+
+/* Bootstrap Overrides end */
+
+/* Mdl Overrides begin */
+
+.mdl-textfield__error {
+    visibility: visible;
+    position: relative;
+    color: #d50000;
+    font-size: 12px;
+    margin-top: 3px;
+    display: block;
+}
+
+/* Mdl Overrides end */
 
 .nsh-right {
     float: right;
@@ -23,10 +53,6 @@ label {
 
 .nsh-left {
     float: left;
-}
-
-.nsh-link {
-  color: #d44457;
 }
 
 .nsh-divider {
@@ -110,11 +136,24 @@ label {
     float: right;
 }
 
-.nsh-navigation-menu-section-item {
+ul.nsh-navigation-menu-section-item {
+    list-style-type: none;
+}
+
+.nsh-navigation-menu-section-item li {
+    float: left;
+}
+
+.nsh-navigation-menu-section-item li a {
     color:white;
     font-weight: bold;
     font-size: 16px;
     padding: 3px 5px 0 5px;
+}
+
+.nsh-navigation-menu-section-item li a:hover {
+    color:#673AB7 !important;
+    text-decoration:none;
 }
 
 .nsh-card-center.mdl-card {
@@ -145,9 +184,6 @@ label {
     font-size: 70%;
 }
 
-.nsh-card-footer a {
-    color: #FF5722;
-}
 
 .nsh-login-remember-me {
     test-align: left;
@@ -166,6 +202,7 @@ $select-padding: 4px;
 
 /* Style Select Field */
 select {
+  margin-top: 20px;
   width: 290px;
   font-family: inherit;
   background-color: transparent;

@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class ProfileController extends Controller
 {
 
     /**
@@ -13,16 +13,16 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
-     * Show the application home page.
+     * Show the profile edit page.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function show()
     {
-        return view('home');
+        return view('profile.edit.profile-edit');
     }
 }
