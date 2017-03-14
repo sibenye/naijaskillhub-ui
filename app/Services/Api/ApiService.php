@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Auth\AuthenticationException;
 
 class ApiService
 {
@@ -72,10 +73,20 @@ class ApiService
 
             $responseArray = $this->convertToAssociativeArray($response->getBody()) ['response'];
         } catch ( ClientException $ex ) {
-            $response = $this->convertToAssociativeArray($ex->getResponse()
-                ->getBody());
-
-            $responseArray ['error'] = $response ['message'];
+            $response = $this->convertToAssociativeArray(
+                    $ex->getResponse()
+                        ->getBody());
+            if ($ex->getResponse()->getStatusCode() == 401) {
+                if ($response ['code'] == 101) {
+                    throw new AuthenticationException();
+                } else if ($response ['code'] == 102) {
+                    abort('401');
+                }
+            } else if ($ex->getResponse()->getStatusCode() == 403) {
+                abort('403', $response ['message']);
+            } else {
+                $responseArray ['error'] = $response ['message'];
+            }
         } catch ( ServerException $ex ) {
             $responseArray ['error'] = 'Internal Server Error In API Server';
         } catch ( RequestException $ex ) {
