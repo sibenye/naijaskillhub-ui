@@ -52,6 +52,9 @@ class LoginController extends Controller
                         'email' => 'required',
                         'password' => 'required'
                 ]);
+        $viewBag = $this->authService->authenticate($request->input('email'),
+                $request->input('password'));
+
         return redirect('/profile/edit');
     }
 }

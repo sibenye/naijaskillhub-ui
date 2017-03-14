@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Exceptions;
 
 use Exception;
@@ -14,12 +13,12 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        \Illuminate\Auth\AuthenticationException::class,
-        \Illuminate\Auth\Access\AuthorizationException::class,
-        \Symfony\Component\HttpKernel\Exception\HttpException::class,
-        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
-        \Illuminate\Session\TokenMismatchException::class,
-        \Illuminate\Validation\ValidationException::class,
+            \Illuminate\Auth\AuthenticationException::class,
+            \Illuminate\Auth\Access\AuthorizationException::class,
+            \Symfony\Component\HttpKernel\Exception\HttpException::class,
+            \Illuminate\Database\Eloquent\ModelNotFoundException::class,
+            \Illuminate\Session\TokenMismatchException::class,
+            \Illuminate\Validation\ValidationException::class
     ];
 
     /**
@@ -44,7 +43,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        Switch (get_class($exception)) {
+            case 'Illuminate\Auth\AuthenticationException' :
+                return $this->unauthenticated($request, $exception);
+                break;
+            default :
+                return parent::render($request, $exception);
+        }
     }
 
     /**
@@ -57,7 +62,10 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->expectsJson()) {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+            return response()->json(
+                    [
+                            'error' => 'Unauthenticated.'
+                    ], 401);
         }
 
         return redirect()->guest(route('login'));

@@ -4,6 +4,8 @@ namespace App\Utilities;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use phpDocumentor\Reflection\Types\This;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * HttpWrapper class.
@@ -30,6 +32,12 @@ class HttpClient extends Client
     private $defaultOptions = [ ];
 
     /**
+     *
+     * @var string
+     */
+    private $baseUri;
+
+    /**
      * HttpWrapper constructor.
      *
      * @param string $baseUri
@@ -40,6 +48,8 @@ class HttpClient extends Client
         parent::__construct([
                 'base_url' => $baseUri
         ]);
+
+        $this->baseUri = $baseUri;
 
         $this->defaultOptions = $options;
         $this->defaultOptions ['connect_timeout'] = env("HTTPCLIENT_CONNECTION_TIMEOUT");
@@ -55,7 +65,7 @@ class HttpClient extends Client
      * @param array|string|resource  $params
      * @param string $method
      * @param array  $options
-     * @return mixed
+     * @return Response
      * @throws GuzzleHttp\Exception\RequestException
      */
     public function makeRequest($endpoint, $params, $method = self::GET, $options = [], $isJsonData = false)
@@ -72,10 +82,11 @@ class HttpClient extends Client
             $this->defaultOptions ['query'] = $params;
         }
 
-        $request = $this->createRequest($method, $endpoint, $this->defaultOptions);
+        // $request = new Request($method, $endpoint);
+        $url = $this->baseUri . $endpoint;
 
-        $response = $this->send($request);
+        $response = $this->request($method, $url, $this->defaultOptions);
 
-        return $response->json();
+        return $response;
     }
 }

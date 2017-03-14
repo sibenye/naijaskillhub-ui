@@ -2,4 +2,10 @@
 
 @section('title', 'My Account')
 
-<div> <h1>Edit Profile</h1></div>
+@section('content')
+<div class="container">
+
+<h1>Edit Profile</h1>
+<p>{{session('authToken')}}</p>
+</div>
+@endsection

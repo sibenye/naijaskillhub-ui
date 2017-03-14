@@ -3,6 +3,9 @@ namespace App\Services\Api;
 
 use App\Utilities\HttpClient;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\RequestException;
 
 class ApiService
 {
@@ -42,7 +45,7 @@ class ApiService
         $params ['password'] = $password;
         $params ['credentialType'] = 'standard';
 
-        return $this->sendRequest('/login', $params, 'POST', [ ], true);
+        return $this->sendRequest('login', $params, 'POST', [ ], true);
     }
 
     /**
@@ -67,9 +70,10 @@ class ApiService
             $response = $this->httpClient->makeRequest($endpoint, $params, $method, $clientOptions,
                     $isJsonData);
 
-            $responseArray = $this->convertToAssociativeArray($response) ['response'];
+            $responseArray = $this->convertToAssociativeArray($response->getBody()) ['response'];
         } catch ( ClientException $ex ) {
-            $response = $this->convertToAssociativeArray($ex->getResponse());
+            $response = $this->convertToAssociativeArray($ex->getResponse()
+                ->getBody());
 
             $responseArray ['error'] = $response ['message'];
         } catch ( ServerException $ex ) {

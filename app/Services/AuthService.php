@@ -20,6 +20,9 @@ class AuthService
     public function authenticate($emailAddress, $password)
     {
         $response = $this->apiService->standardLogin($emailAddress, $password);
+        session([
+                'authToken' => $response ['authToken']
+        ]);
         return $response;
     }
 }
