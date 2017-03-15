@@ -7,10 +7,11 @@
 <div class="nsh-home-layout-header">
   <div class="nsh-navigation-transparent">
     <div class="nsh-navigation-row">
-      <!-- Title -->
-      <span class="nsh-navigation-title">
-        <img width=300 height=70 alt="Brand" src="{{ asset('images/nsh_logo_transparent.png') }}">
-      </span>
+
+      <a href="{{ url('/') }}" alt="{{ config('app.name',
+				'Naija Skill Hub') }}"><span class="nsh-navigation-title nsh-navigation-title-image">
+
+      </span></a>
 
       <nav class="nsh-navigation-menu-section">
       <div>

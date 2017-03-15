@@ -3,7 +3,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Utilities\HttpClient;
-use App\Services\Api\ApiService;
+use App\Services\ApiWrapper\ApiService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind('App\Services\Api\ApiService',
                 function ($app) {
-                    return new ApiService(new HttpClient(env('NSH_API_BASE_URL')));
+                    return new ApiService(new HttpClient());
                 });
     }
 }

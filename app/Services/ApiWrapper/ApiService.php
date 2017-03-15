@@ -1,5 +1,5 @@
 <?php
-namespace App\Services\Api;
+namespace App\Services\ApiWrapper;
 
 use App\Utilities\HttpClient;
 use GuzzleHttp\Psr7\Response;
@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Auth\AuthenticationException;
+use App\Models\User;
 
 class ApiService
 {
@@ -35,6 +36,23 @@ class ApiService
 
     /**
      *
+     * @param string $username
+     * @param string $password
+     * @return boolean
+     */
+    public function authenticateUserCredentials($username, $password)
+    {
+        $userResponse = $this->standardLogin($username, $password);
+
+        if (array_key_exists('error', $userResponse)) {
+            return false;
+        } else {
+            return $userResponse;
+        }
+    }
+
+    /**
+     *
      * @param string $emailAddress
      * @param string $password
      * @return array
@@ -47,6 +65,65 @@ class ApiService
         $params ['credentialType'] = 'standard';
 
         return $this->sendRequest('login', $params, 'POST', [ ], true);
+    }
+
+    public function getUserModelById($id)
+    {
+        $userResponse = $this->getUserById($id);
+        $userModel = NULL;
+
+        if (!array_key_exists('error', $userResponse)) {
+            $userAttributes = $this->mapAttributes($userResponse);
+            $userModel = new User($userAttributes);
+        }
+
+        return $userModel;
+    }
+
+    public function getUserModelByEmailAddress($email)
+    {
+        $userResponse = $this->getUserByEmailAddress($email);
+        $userModel = NULL;
+
+        if (!array_key_exists('error', $userResponse)) {
+            $userAttributes = $this->mapAttributes($userResponse);
+            $userModel = new User($userAttributes);
+        }
+
+        return $userModel;
+    }
+
+    /**
+     * Get User by email.
+     *
+     * @param string $email
+     */
+    public function getUserByEmailAddress($email)
+    {
+        return $this->sendRequest('users/byEmail/' . $email, [ ], 'GET');
+    }
+
+    /**
+     * Get User by id.
+     *
+     * @param int $id
+     */
+    public function getUserById($id)
+    {
+        return $this->sendRequest('users/' . $id, [ ], 'GET');
+    }
+
+    private function mapAttributes($userResponse)
+    {
+        $userAttributes = [ ];
+        $userAttributes ['id'] = $userResponse ['userId'];
+        $userAttributes ['isActive'] = $userResponse ['isActive'];
+        $userAttributes ['email'] = $userResponse ['emailAddress'];
+        $userAttributes ['credentialTypes'] = $userResponse ['credentialTypes'];
+        $userAttributes ['accountTypes'] = $userResponse ['accountTypes'];
+        $userAttributes ['categories'] = $userResponse ['categories'];
+
+        return $userAttributes;
     }
 
     /**

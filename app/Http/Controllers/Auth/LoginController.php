@@ -45,16 +45,18 @@ class LoginController extends Controller
         $this->authService = $authService;
     }
 
-    public function authenticate(Request $request)
-    {
-        $this->validate($request,
-                [
-                        'email' => 'required',
-                        'password' => 'required'
-                ]);
-        $viewBag = $this->authService->authenticate($request->input('email'),
-                $request->input('password'));
-
-        return redirect('/profile/edit');
-    }
+    /*
+     * public function authenticate(Request $request)
+     * {
+     * $this->validate($request,
+     * [
+     * 'email' => 'required',
+     * 'password' => 'required'
+     * ]);
+     * $viewBag = $this->authService->authenticate($request->input('email'),
+     * $request->input('password'));
+     *
+     * return redirect('/profile/edit');
+     * }
+     */
 }

@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Services\Api\ApiService;
+use App\Services\ApiWrapper\ApiService;
 
 class AuthService
 {

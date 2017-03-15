@@ -15,8 +15,8 @@ Route::get('/home', 'HomeController@index');
 
 Auth::routes();
 
-Route::post('/login', 'Auth\LoginController@authenticate');
+// Route::post('/login', 'Auth\LoginController@authenticate');
 
-Route::get('/profile/edit', 'ProfileController@show');
+Route::get('/profile/edit', 'ProfileController@show')->name('profile');
 
 
