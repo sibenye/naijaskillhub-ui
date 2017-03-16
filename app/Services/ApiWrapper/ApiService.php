@@ -113,6 +113,22 @@ class ApiService
         return $this->sendRequest('users/' . $id, [ ], 'GET');
     }
 
+    public function getUserAttributes($id, $authToken, $attributeType = NULL, $attributeNames = [])
+    {
+        $headerOptions = [ ];
+        $headerOptions ['NSH-AUTH-TOKEN'] = $authToken;
+        $params = [ ];
+
+        if ($attributeType) {
+            $params ['attributeType'] = $attributeType;
+        }
+
+        if (count($attributeNames) > 0) {
+            $params ['attributeNames'] = implode(',', $attributeNames);
+        }
+        return $this->sendRequest('users/' . $id . '/attributes', $params, 'GET', $headerOptions);
+    }
+
     private function mapAttributes($userResponse)
     {
         $userAttributes = [ ];

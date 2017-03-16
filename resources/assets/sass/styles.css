@@ -106,7 +106,7 @@ label {
     align-items: center;
     height: 64px;
     margin: 0;
-    padding: 20px 80px 0 30px;
+    padding: 20px 80px 0 80px;
     flex-direction: row;
     flex-wrap: nowrap;
     flex-shrink: 0;
@@ -197,6 +197,11 @@ ul.nsh-navigation-menu-section-item {
     margin: 50px auto;
 }
 
+.nsh-card.mdl-card {
+    width: 100% !important;
+    margin-bottom: 30px;
+}
+
 .nsh-card-content {
     align-items: center;
     text-align: center;
@@ -209,6 +214,14 @@ ul.nsh-navigation-menu-section-item {
 
 .nsh-card-content .mdl-textfield {
     text-align: left;
+}
+
+.nsh-card-content .mdl-textfield__input {
+    font-family: inherit;
+}
+
+.nsh-card-content .mdl-textfield.is-focused .mdl-textfield__input {
+    border-bottom: 0;
 }
 
 .nsh-card-footer {
@@ -238,13 +251,14 @@ $select-padding: 4px;
 
 /* Style Select Field */
 select {
-  margin-top: 20px;
+  margin-top: 30px;
   width: 290px;
   font-family: inherit;
   background-color: transparent;
   padding: $select-padding 0;
   font-size: $select-font-size;
-  color: $select-color;
+  color: inherit;
+  font-weight: inherit;
   border: none;
   border-bottom: 1px solid $select-border-color;
 }
@@ -258,4 +272,34 @@ select:focus {
     display: none;
 }
 /* Custom css for mdl select component - End*/
+.nsh-dashboard-sidebar-fixed {
+    /*margin-top: -20px;*/
+    margin-bottom: 30px;
+    top: 20px;
+}
+
+@media (min-width: 768px) {
+    .nsh-dashboard-sidebar-fixed {
+        position: fixed;
+        top: 100px;
+        bottom: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        background-color: #30343e;
+        overflow-y: auto;
+    }
+}
+
+.nsh-dashboard-content {
+    position: relative;
+    width: 90%px;
+}
+
+@media (min-width: 450px) {
+    .nsh-dashboard-content {
+        position: relative;
+        width: 70%px;
+    }
+}
+
 

@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ProfileController extends Controller
+class AccountController extends Controller
 {
 
     /**
@@ -17,12 +17,12 @@ class ProfileController extends Controller
     }
 
     /**
-     * Show the profile edit page.
+     * Show the account page.
      *
      * @return \Illuminate\Http\Response
      */
     public function show()
     {
-        return view('profile.edit.profile-edit');
+        return view('account.dashboard');
     }
 }

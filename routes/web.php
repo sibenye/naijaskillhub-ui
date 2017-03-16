@@ -17,6 +17,6 @@ Auth::routes();
 
 // Route::post('/login', 'Auth\LoginController@authenticate');
 
-Route::get('/profile/edit', 'ProfileController@show')->name('profile');
+Route::get('/account', 'AccountController@show')->name('account');
 
 

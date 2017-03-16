@@ -10,7 +10,7 @@
 
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
     for="demo-menu-lower-right">
-  <li class="mdl-menu__item"><a href="{{ route('profile') }}">My Account</a></li>
+  <li class="mdl-menu__item"><a href="{{ route('account') }}">My Account</a></li>
   <li class="mdl-menu__item"><a href="{{ route('logout') }}"
                     onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                     Logout </a>
@@ -19,23 +19,5 @@
             {{ csrf_field() }}
             </form></li>
 </ul>
-        <!-- <li class="dropdown"><a href="#" class="dropdown-toggle"
-                data-toggle="dropdown" role="button" aria-expanded="false">
-        <i class="material-icons">account_circle</i> <span class="caret"></span>
-            </a>
 
-            <ul class="dropdown-menu" role="menu">
-            <li>
-            <a href="{{ route('profile') }}">My Account</a>
-            </li>
-            <li>
-            <a href="{{ route('logout') }}"
-                    onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                    Logout </a>
-
-            <form id="logout-form" action="{{ route('logout') }}"method="POST" style="display: none;">
-            {{ csrf_field() }}
-            </form>
-            </li>
-            </ul></li>-->
     @endif
