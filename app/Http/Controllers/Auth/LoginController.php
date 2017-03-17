@@ -34,15 +34,13 @@ class LoginController extends Controller
      *
      * @return void
      */
-    public function __construct(AuthService $authService)
+    public function __construct()
     {
         $this->middleware('web');
 
         $this->middleware('guest', [
                 'except' => 'logout'
         ]);
-
-        $this->authService = $authService;
     }
 
     /*

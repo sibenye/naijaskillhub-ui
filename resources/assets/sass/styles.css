@@ -45,6 +45,19 @@ label {
     display: block;
 }
 
+.mdl-button--file {
+  input {
+    cursor: pointer;
+    height: 100%;
+    right: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 300px;
+    z-index: 4;
+  }
+}
+
 /* Mdl Overrides end */
 
 .nsh-right {
@@ -59,6 +72,7 @@ label {
     height: 50px;
 }
 
+/* Navigation and Header - begin */
 .nsh-header-content {
 	margin-top: 100px;
     text-align: center;
@@ -192,52 +206,7 @@ ul.nsh-navigation-menu-section-item {
     text-decoration:none;
 }
 
-.nsh-card-center.mdl-card {
-    width: 80%;
-    margin: 50px auto;
-}
-
-.nsh-card.mdl-card {
-    width: 100% !important;
-    margin-bottom: 30px;
-}
-
-.nsh-card-content {
-    align-items: center;
-    text-align: center;
-    padding: 10px 20px 0 20px;
-}
-
-.nsh-card-content .mdl-checkbox {
-    text-align: left;
-}
-
-.nsh-card-content .mdl-textfield {
-    text-align: left;
-}
-
-.nsh-card-content .mdl-textfield__input {
-    font-family: inherit;
-}
-
-.nsh-card-content .mdl-textfield.is-focused .mdl-textfield__input {
-    border-bottom: 0;
-}
-
-.nsh-card-footer {
-    text-align: center;
-    opacity: 0.7;
-}
-
-.nsh-card-footer p {
-    font-size: 70%;
-}
-
-
-.nsh-login-remember-me {
-    test-align: left;
-    font-size: 90%;
-}
+/* Navigation and Header - end */
 
 /* Custom css for mdl select component - Begin*/
 
@@ -272,6 +241,8 @@ select:focus {
     display: none;
 }
 /* Custom css for mdl select component - End*/
+
+/* Dashboard - Begin */
 .nsh-dashboard-sidebar-fixed {
     /*margin-top: -20px;*/
     margin-bottom: 30px;
@@ -301,5 +272,57 @@ select:focus {
         width: 70%px;
     }
 }
+
+/* Dashboard - end */
+
+
+.nsh-card-center.mdl-card {
+    width: 80%;
+    margin: 50px auto;
+}
+
+.nsh-card.mdl-card {
+    width: 100% !important;
+    margin-bottom: 30px;
+}
+
+.nsh-card-content {
+    align-items: center;
+    text-align: center;
+    padding: 10px 20px 0 20px;
+}
+
+.nsh-card-content .mdl-checkbox {
+    text-align: left;
+}
+
+.nsh-card-content .mdl-textfield {
+    text-align: left;
+}
+
+.nsh-card-content .mdl-textfield__input {
+    font-family: inherit;
+}
+
+.nsh-card-content .mdl-textfield.is-focused .mdl-textfield__input {
+    border-bottom: none;
+}
+
+.nsh-card-footer {
+    text-align: center;
+    opacity: 0.7;
+}
+
+.nsh-card-footer p {
+    font-size: 70%;
+}
+
+
+.nsh-login-remember-me {
+    test-align: left;
+    font-size: 90%;
+}
+
+
 
 

@@ -15,9 +15,9 @@ class ApiAuthUserProvider implements UserProvider
      */
     private $apiService;
 
-    public function __construct()
+    public function __construct(ApiService $apiService)
     {
-        $this->apiService = new ApiService(new HttpClient(env('NSH_API_BASE_URL')));
+        $this->apiService = $apiService;
     }
 
     /**

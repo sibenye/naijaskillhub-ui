@@ -45,10 +45,12 @@ class HttpClient extends Client
      */
     public function __construct($baseUri = null, $options = [])
     {
-        parent::__construct(
-                [
-                        'base_url' => is_null($baseUri) ? env('NSH_API_BASE_URL') : $baseUri
-                ]);
+        if (is_null($baseUri)) {
+            $baseUri = env('NSH_API_BASE_URL');
+        }
+        parent::__construct([
+                'base_url' => $baseUri
+        ]);
 
         $this->baseUri = $baseUri;
 

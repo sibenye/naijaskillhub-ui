@@ -2,18 +2,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\Account\ProfileService;
+use App\Services\StatesService;
 
 class AccountController extends Controller
 {
+    /**
+     *
+     * @var ProfileService
+     */
+    private $profileService;
+
+    /**
+     *
+     * @var StatesService
+     */
+    private $statesService;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ProfileService $profileService, StatesService $statesService)
     {
-        // $this->middleware('auth');
+        $this->profileService = $profileService;
+        $this->statesService = $statesService;
+        $this->middleware('auth');
     }
 
     /**
@@ -23,6 +38,15 @@ class AccountController extends Controller
      */
     public function show()
     {
-        return view('account.dashboard');
+        $attributes = $this->profileService->getProfileAttributes();
+        $stateList = $this->statesService->getListOfNigerianStates();
+
+        $viewBag = [
+                'attributes' => $attributes,
+                'stateList' => $stateList
+        ];
+        return view('account.dashboard', [
+                'viewBag' => $viewBag
+        ]);
     }
 }

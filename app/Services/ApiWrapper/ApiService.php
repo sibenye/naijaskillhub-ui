@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Auth\AuthenticationException;
 use App\Models\User;
+use Illuminate\Support\Facades\Config;
 
 class ApiService
 {
@@ -116,8 +117,9 @@ class ApiService
     public function getUserAttributes($id, $authToken, $attributeType = NULL, $attributeNames = [])
     {
         $headerOptions = [ ];
-        $headerOptions ['NSH-AUTH-TOKEN'] = $authToken;
+        $headerOptions [Config::get('constants.authToken_header_name')] = $authToken;
         $params = [ ];
+        $endPoint = 'users/' . $id . '/attributes';
 
         if ($attributeType) {
             $params ['attributeType'] = $attributeType;
@@ -126,7 +128,7 @@ class ApiService
         if (count($attributeNames) > 0) {
             $params ['attributeNames'] = implode(',', $attributeNames);
         }
-        return $this->sendRequest('users/' . $id . '/attributes', $params, 'GET', $headerOptions);
+        return $this->sendRequest($endPoint, $params, 'GET', $headerOptions);
     }
 
     private function mapAttributes($userResponse)
@@ -154,7 +156,7 @@ class ApiService
     private function sendRequest($endpoint, $params, $method = 'GET', array $headerOptions = [],
             $isJsonData = false)
     {
-        $headerOptions ['NSH-API-KEY'] = $this->apiKey;
+        $headerOptions [Config::get('constants.apiKey_header_name')] = $this->apiKey;
         $clientOptions = [ ];
         $clientOptions ['headers'] = $headerOptions;
 
@@ -177,9 +179,9 @@ class ApiService
                 }
             } else if ($ex->getResponse()->getStatusCode() == 403) {
                 abort('403', $response ['message']);
-            } else {
-                $responseArray ['error'] = $response ['message'];
             }
+
+            $responseArray ['error'] = $response ['message'];
         } catch ( ServerException $ex ) {
             $responseArray ['error'] = 'Internal Server Error In API Server';
         } catch ( RequestException $ex ) {

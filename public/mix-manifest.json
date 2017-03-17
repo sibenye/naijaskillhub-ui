@@ -1,5 +1,7 @@
 {
   "/js/app.js": "/js/app.js",
   "/css/app.css": "/css/app.css",
+  "/css/mdl-selectfield.min.css": "/css/mdl-selectfield.min.css",
+  "/js/mdl-selectfield.min.js": "/js/mdl-selectfield.min.js",
   "/css/styles.css": "/css/styles.css"
 }

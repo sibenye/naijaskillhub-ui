@@ -15,8 +15,8 @@ class ApiAuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app ['auth']->provider('externalauthapi',
-                function () {
-                    return new ApiAuthUserProvider();
+                function ($app) {
+                    return $app->make('App\Services\Auth\ApiAuthUserProvider');
                 });
     }
 
@@ -27,6 +27,9 @@ class ApiAuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('App\Services\Auth\ApiAuthUserProvider',
+                function ($app) {
+                    return new ApiAuthUserProvider($app->make('App\Services\Api\ApiService'));
+                });
     }
 }

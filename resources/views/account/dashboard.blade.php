@@ -16,8 +16,7 @@
 
 </nav>
   <div class="nsh-dashboard-content col-md-8 col-md-offset-4">
-      @component('components.profile_edit')
-      @endcomponent
+      @include('components.profile_edit')
     </div>
 
 </div>
