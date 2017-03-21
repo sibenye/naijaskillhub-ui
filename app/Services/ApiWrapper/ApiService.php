@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\RequestException;
 use Illuminate\Auth\AuthenticationException;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 
 class ApiService
 {
@@ -68,6 +69,30 @@ class ApiService
         return $this->sendRequest('login', $params, 'POST', [ ], true);
     }
 
+    /**
+     * Calls API register endpoint.
+     *
+     * @param string $emailAddress
+     * @param string $password
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $accountType
+     * @param string $credentialType
+     */
+    public function registerUser($emailAddress, $password, $firstName, $lastName, $accountType,
+            $credentialType = 'standard')
+    {
+        $params = [ ];
+        $params ['emailAddress'] = $emailAddress;
+        $params ['password'] = $password;
+        $params ['credentialType'] = $credentialType;
+        $params ['firstName'] = $firstName;
+        $params ['lastName'] = $lastName;
+        $params ['accountType'] = $accountType;
+
+        return $this->sendRequest('register', $params, 'POST', [ ], true);
+    }
+
     public function getUserModelById($id)
     {
         $userResponse = $this->getUserById($id);
@@ -114,6 +139,14 @@ class ApiService
         return $this->sendRequest('users/' . $id, [ ], 'GET');
     }
 
+    /**
+     * Get User Attribute Values.
+     *
+     * @param int $id
+     * @param string $authToken
+     * @param string $attributeType
+     * @param array $attributeNames
+     */
     public function getUserAttributes($id, $authToken, $attributeType = NULL, $attributeNames = [])
     {
         $headerOptions = [ ];
@@ -129,6 +162,16 @@ class ApiService
             $params ['attributeNames'] = implode(',', $attributeNames);
         }
         return $this->sendRequest($endPoint, $params, 'GET', $headerOptions);
+    }
+
+    public function saveUserAttributeValues($id, $authToken, $attributeValues)
+    {
+        $headerOptions = [ ];
+        $headerOptions [Config::get('constants.authToken_header_name')] = $authToken;
+        $params = $attributeValues;
+        $endPoint = 'users/' . $id . '/attributes';
+
+        return $this->sendRequest($endPoint, $params, 'POST', $headerOptions, true);
     }
 
     private function mapAttributes($userResponse)
@@ -167,10 +210,12 @@ class ApiService
                     $isJsonData);
 
             $responseArray = $this->convertToAssociativeArray($response->getBody()) ['response'];
+            Log::info('RESPONSE: ' . $response->getBody());
         } catch ( ClientException $ex ) {
             $response = $this->convertToAssociativeArray(
                     $ex->getResponse()
                         ->getBody());
+            Log::info('CATCH1: ' . $ex->getResponse()->getBody());
             if ($ex->getResponse()->getStatusCode() == 401) {
                 if ($response ['code'] == 101) {
                     throw new AuthenticationException();

@@ -1,26 +1,33 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Services\Auth\ApiAuthUserProvider;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
     /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
+     * |--------------------------------------------------------------------------
+     * | Register Controller
+     * |--------------------------------------------------------------------------
+     * |
+     * | This controller handles the registration of new users as well as their
+     * | validation and creation. By default this controller uses a trait to
+     * | provide this functionality without requiring any additional code.
+     * |
+     */
 
     use RegistersUsers;
+
+    /**
+     *
+     * @var ApiAuthUserProvider
+     */
+    private $apiAuthUserProvider;
 
     /**
      * Where to redirect users after registration.
@@ -34,9 +41,10 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ApiAuthUserProvider $apiAuthUserProvider)
     {
         $this->middleware('guest');
+        $this->apiAuthUserProvider = $apiAuthUserProvider;
     }
 
     /**
@@ -47,11 +55,15 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ]);
+        return Validator::make($data,
+                [
+                        'email' => 'required|email|max:200',
+                        'password' => 'required|min:8|confirmed',
+                        'firstName' => 'required|max:45',
+                        'lastName' => 'required|max:45',
+                        'credentialType' => 'required|max:20',
+                        'accountType' => 'required|max:20'
+                ]);
     }
 
     /**
@@ -62,10 +74,23 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        return $this->apiAuthUserProvider->registerUser($data);
+    }
+
+    /**
+     * This overrides corresponding function in RegistersUsers trait.
+     *
+     * @param Request $request
+     * @param mixed $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
+        if (is_null($user)) {
+            $request->session()->flash('apiError', 'Unable to register User');
+            return view('auth.register');
+        }
+
+        return null;
     }
 }

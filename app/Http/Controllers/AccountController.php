@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\Account\ProfileService;
 use App\Services\StatesService;
+use Illuminate\Support\Facades\Log;
 
 class AccountController extends Controller
 {
@@ -28,6 +29,7 @@ class AccountController extends Controller
     {
         $this->profileService = $profileService;
         $this->statesService = $statesService;
+        $this->middleware('web');
         $this->middleware('auth');
     }
 
@@ -48,5 +50,28 @@ class AccountController extends Controller
         return view('account.dashboard', [
                 'viewBag' => $viewBag
         ]);
+    }
+
+    /**
+     * Save User Profile.
+     * This should only be called using Ajax.
+     * It returns json and not a view.
+     */
+    public function saveProfile(Request $request)
+    {
+        Log::info("REQUEST HEADER: " . json_encode($request->headers));
+        if ($request->isXmlHttpRequest()) {
+            Log::info("IS JSON REQUEST");
+        }
+        $userProfile = $request->all();
+        $response = $this->profileService->saveUserProfile($userProfile);
+        $httpStatus = 200;
+
+        if (array_key_exists('error', $response)) {
+            $httpStatus = 400;
+        }
+        return response()->json([
+                'status' => 'success'
+        ], $httpStatus);
     }
 }

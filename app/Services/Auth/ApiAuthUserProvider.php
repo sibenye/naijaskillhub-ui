@@ -78,4 +78,21 @@ class ApiAuthUserProvider implements UserProvider
 
         return false;
     }
+
+    public function registerUser($registerData)
+    {
+        $response = $this->apiService->registerUser($registerData ['email'],
+                $registerData ['password'], $registerData ['firstName'], $registerData ['lastName'],
+                $registerData ['accountType'], $registerData ['credentialType']);
+
+        if ($response && !array_key_exists('error', $response)) {
+            $userId = $response ['userId'];
+            session(
+                    [
+                            'nsh_authToken' => $response ['authToken']
+                    ]);
+            return $this->retrieveById($userId);
+        }
+        return null;
+    }
 }

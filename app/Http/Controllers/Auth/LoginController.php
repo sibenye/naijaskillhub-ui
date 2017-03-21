@@ -3,8 +3,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\Services\AuthService;
-use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -20,7 +18,6 @@ class LoginController extends Controller
      */
 
     use AuthenticatesUsers;
-    private $authService;
 
     /**
      * Where to redirect users after login.
@@ -42,19 +39,5 @@ class LoginController extends Controller
                 'except' => 'logout'
         ]);
     }
-
-    /*
-     * public function authenticate(Request $request)
-     * {
-     * $this->validate($request,
-     * [
-     * 'email' => 'required',
-     * 'password' => 'required'
-     * ]);
-     * $viewBag = $this->authService->authenticate($request->input('email'),
-     * $request->input('password'));
-     *
-     * return redirect('/profile/edit');
-     * }
-     */
 }
+

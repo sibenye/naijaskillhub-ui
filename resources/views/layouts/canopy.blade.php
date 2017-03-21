@@ -29,6 +29,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/nsh-functions.js') }}"></script>
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 </body>
 </html>

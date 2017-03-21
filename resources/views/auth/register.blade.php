@@ -9,6 +9,10 @@
             <div class="nsh-card-center mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title mdl-color--primary mdl-color-text--white"><h2 class="mdl-card__title-text">Register</h2></div>
                 <div class="nsh-card-content">
+                    @if (Session::has('apiError'))
+                    <span>{{ Session::get('apiError') }}</span>
+                    <br/>
+                    @endIf
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
                         {{ csrf_field() }}
 
@@ -16,7 +20,7 @@
                             <div>
                                 <div class="mdl-selectfield">
                                     <label>Member Type</label>
-                                    <select class="browser-default">
+                                    <select class="browser-default" id="accountType" name="accountType">
                                       <option value="" disabled selected>Member Type</option>
                                       <option value="talent">Talent</option>
                                       <option value="hunter">Hunter</option>
@@ -92,6 +96,7 @@
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden" id="credentialType" name="credentialType" value="standard">
 
                         <div class="mdl-card__actions mdl-card--border">
                         <div class="row">

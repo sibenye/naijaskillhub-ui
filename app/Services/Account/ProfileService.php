@@ -3,6 +3,7 @@ namespace App\Services\Account;
 
 use App\Services\ApiWrapper\ApiService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ProfileService
 {
@@ -38,5 +39,22 @@ class ProfileService
         }
 
         return $profileAttributes;
+    }
+
+    public function saveUserProfile($userProfile)
+    {
+        $userId = Auth::user()->getAuthIdentifier();
+        $authToken = session('nsh_authToken');
+        Log::info('PROFILE POST REQUEST: ' . json_encode($userProfile));
+
+        $response = $this->apiService->saveUserAttributeValues($userId, $authToken, $userProfile);
+
+        if (!empty($response) && array_key_exists('error', $response)) {
+            return $response;
+        }
+
+        return [
+                'status' => 'success'
+        ];
     }
 }

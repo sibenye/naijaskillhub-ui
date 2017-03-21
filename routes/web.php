@@ -18,5 +18,6 @@ Auth::routes();
 // Route::post('/login', 'Auth\LoginController@authenticate');
 
 Route::get('/account', 'AccountController@show')->name('account');
+Route::post('/account/profile/edit', 'AccountController@saveProfile');
 
 
