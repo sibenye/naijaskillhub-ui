@@ -59,10 +59,11 @@ class AccountController extends Controller
      */
     public function saveProfile(Request $request)
     {
-        Log::info("REQUEST HEADER: " . json_encode($request->headers));
+        Log::info("REQUEST HEADER: " . json_encode($request->headers->all()));
         if ($request->isXmlHttpRequest()) {
             Log::info("IS JSON REQUEST");
         }
+        Log::info("REQUEST: " . $request->input('firstName', NULL));
         $userProfile = $request->all();
         $response = $this->profileService->saveUserProfile($userProfile);
         $httpStatus = 200;

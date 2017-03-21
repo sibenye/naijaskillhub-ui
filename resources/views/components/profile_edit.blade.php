@@ -6,7 +6,7 @@
         <h2 class="mdl-card__title-text">Profile</h2>
         </div>
         <div class="nsh-card-content">
-        <form action="">
+        <form id="profile-edit-form" action="">
             <div>
                 <div class="row">
                 <div class="col-md-6">

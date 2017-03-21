@@ -88,14 +88,11 @@ function saveUserProfile() {
     var gender = document.getElementById("profile-gender").value;
     var yob = document.getElementById("profile-yob").value;
 
-    console.log(firstName);
-    console.log(lastName);
-    console.log(city);
-    console.log(state);
-    console.log(gender);
-    console.log(yob);
+    var formElement = document.getElementById("profile-edit-form");
+    //var formData = new FormData(formElement);
 
-    data = {
+
+    var formData = {
         firstName: firstName,
         lastName: lastName,
         city: city,
@@ -103,9 +100,10 @@ function saveUserProfile() {
         gender: gender,
         yob: yob
     };
+    console.log(formData);
 
     document.getElementById("mdl-spinner-profile").classList.add('is-active');
-    makeRequest('account/profile/edit', 'POST', data, handleProfileSaveResponse, 'mdl-spinner-profile');
+    makeRequest('account/profile/edit', 'POST', JSON.stringify(formData), handleProfileSaveResponse, 'mdl-spinner-profile');
 }
 
 function makeRequest(url, method, data, customResponseHandler, spinnerId) {
@@ -140,6 +138,7 @@ function makeRequest(url, method, data, customResponseHandler, spinnerId) {
     };
 
     httpRequest.open(method, url);
+    httpRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     httpRequest.setRequestHeader('X-CSRF-TOKEN', window.Laravel.csrfToken);
     if (method === 'POST') {
         httpRequest.setRequestHeader('Content-Type', 'application/json');
