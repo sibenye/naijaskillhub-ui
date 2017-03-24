@@ -149,10 +149,8 @@ class ApiService
      */
     public function getUserAttributes($id, $authToken, $attributeType = NULL, $attributeNames = [])
     {
-        $headerOptions = [ ];
-        $headerOptions [Config::get('constants.authToken_header_name')] = $authToken;
         $params = [ ];
-        $endPoint = 'users/' . $id . '/attributes';
+        $endpoint = 'users/' . $id . '/attributes';
 
         if ($attributeType) {
             $params ['attributeType'] = $attributeType;
@@ -161,19 +159,59 @@ class ApiService
         if (count($attributeNames) > 0) {
             $params ['attributeNames'] = implode(',', $attributeNames);
         }
-        return $this->sendRequest($endPoint, $params, 'GET', $headerOptions);
+        return $this->sendRequest($endpoint, $params, 'GET', $this->buildAuthHeader($authToken));
     }
 
+    /**
+     * Save User Attribute Values.
+     *
+     * @param int $id
+     * @param string $authToken
+     * @param array $attributeValues
+     */
     public function saveUserAttributeValues($id, $authToken, $attributeValues)
+    {
+        $params = $attributeValues;
+        $endpoint = 'users/' . $id . '/attributes';
+
+        return $this->sendRequest($endpoint, $params, 'POST', $this->buildAuthHeader($authToken),
+                true);
+    }
+
+    /**
+     *
+     * @param string $image
+     * @param string $authToken
+     */
+    public function uploadUserProfileImage($image, $contentType, $authToken)
+    {
+        $endpoint = 'upload/profileImage';
+        $headerOptions = $this->buildAuthHeader($authToken);
+        $headerOptions ['Content-Type'] = $contentType;
+
+        return $this->sendRequest($endpoint, $image, 'POST', $headerOptions);
+    }
+
+    /**
+     * Puts the authToken in a header array and
+     * returns the header array.
+     *
+     * @param string $authToken
+     * @return array
+     */
+    private function buildAuthHeader($authToken)
     {
         $headerOptions = [ ];
         $headerOptions [Config::get('constants.authToken_header_name')] = $authToken;
-        $params = $attributeValues;
-        $endPoint = 'users/' . $id . '/attributes';
 
-        return $this->sendRequest($endPoint, $params, 'POST', $headerOptions, true);
+        return $headerOptions;
     }
 
+    /**
+     *
+     * @param array $userResponse
+     * @return array
+     */
     private function mapAttributes($userResponse)
     {
         $userAttributes = [ ];
@@ -228,9 +266,10 @@ class ApiService
 
             $responseArray ['error'] = $response ['message'];
         } catch ( ServerException $ex ) {
-            $responseArray ['error'] = 'Internal Server Error In API Server';
+            $responseArray ['error'] = 'Internal Server Error In API Server: ' . $ex->getMessage();
+            Log::error('ERROR: ' . $ex->getMessage());
         } catch ( RequestException $ex ) {
-            $responseArray ['error'] = 'Error Recieved From API Request';
+            $responseArray ['error'] = 'Error Recieved From API Request: ' . $ex->getMessage();
         }
 
         return $responseArray;

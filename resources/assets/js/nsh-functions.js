@@ -6,7 +6,50 @@ var httpRequest;
 
 // define event listeners
 document.getElementById("profileSaveBtn").addEventListener("click", saveUserProfile, false);
+document.getElementById("uploadProfileImageBtn").addEventListener("change", uploadProfileImage, false);
 
+/**
+ * Handles user profile image upload.
+ * 
+ * @returns
+ */
+function uploadProfileImage() {
+	var selectedFile = this.files[0];
+	var contentType = selectedFile.type;
+	console.log('contentType: ' + contentType);
+	document.getElementById("mdl-spinner-profile-image").classList.add('is-active');
+	makeRequest('account/profile/image/upload', 'POST', selectedFile, handleProfileImageUploadResponse, 'mdl-spinner-profile-image', contentType);
+}
+
+function handleProfileImageUploadResponse(status, message) {
+	var imageElement = document.getElementById("profile-image");
+	var notice = document.getElementById("profile-image-save-notice");
+	
+	if(status === 'success') {
+		var uploadAdd = document.getElementById("upload-text-add");
+		var uploadChange = document.getElementById("upload-text-change");
+		
+		imageElement.setAttribute('src', message.fileSrc);
+		imageElement.style.display = 'block';
+		
+		notice.className = 'nsh-save-notice-success';
+		notice.innerHTML = 'Uploaded';
+		
+		uploadAdd.style.display = 'none';
+		uploadChange.style.display = 'inline';
+		fade(notice, 150);
+	} else {
+		notice.className = 'nsh-save-notice-error';
+		notice.innerHTML = 'Error';
+	}
+	
+}
+
+/**
+ * Handle user profile form submit.
+ * 
+ * @returns
+ */
 function saveUserProfile() {
 	var firstName = document.getElementById("profile-firstName").value;
 	var lastName = document.getElementById("profile-lastName").value;
@@ -16,8 +59,6 @@ function saveUserProfile() {
 	var yob = document.getElementById("profile-yob").value;
 	
 	var formElement = document.getElementById("profile-edit-form");
-	//var formData = new FormData(formElement);
-	
 	
 	var formData = {
 			firstName: firstName,
@@ -33,7 +74,36 @@ function saveUserProfile() {
 	makeRequest('account/profile/edit', 'POST', JSON.stringify(formData), handleProfileSaveResponse, 'mdl-spinner-profile');
 }
 
-function makeRequest(url, method, data, customResponseHandler, spinnerId) {
+/**
+ * Handle response from profile save ajax request.
+ * 
+ * @param status
+ * @param message
+ * @returns
+ */
+function handleProfileSaveResponse(status, message) {
+	var notice = document.getElementById("profile-save-notice");
+	if (status === 'success') {
+		notice.className = 'nsh-save-notice-success';
+		notice.innerHTML = 'Saved';
+		fade(notice, 150);
+	} else {
+		notice.className = 'nsh-save-notice-error';
+		notice.innerHTML = 'Error';
+	}
+}
+
+/**
+ * Make Ajax request.
+ * 
+ * @param url
+ * @param method
+ * @param data
+ * @param customResponseHandler
+ * @param spinnerId
+ * @returns
+ */
+function makeRequest(url, method, data, customResponseHandler, spinnerId, contentType = 'application/json') {
     httpRequest = new XMLHttpRequest();
 
     if (!httpRequest) {
@@ -47,18 +117,16 @@ function makeRequest(url, method, data, customResponseHandler, spinnerId) {
     	    	  console.log(httpRequest.responseText);
     	    	  response = JSON.parse(httpRequest.responseText);
     	    	  if (customResponseHandler !== undefined) {
-    	    		  customResponseHandler('success', response);
-    	    	  }else {
-        	          console.log(response.status);
+    	    		  customResponseHandler('success', response.response);
     	    	  }
+    	    	  console.log(response.status);
     	      } else {
     	    	  console.log(httpRequest.responseText);
     	    	  response = JSON.parse(httpRequest.responseText);
     	    	  if (customResponseHandler !== undefined) {
-    	    		  customResponseHandler('error', response);
-    	    	  }else {
-    	    		  console.error(response.error);
+    	    		  customResponseHandler('error', response.message);
     	    	  }
+    	    	  console.error(response.message);
     	      }
     	      document.getElementById(spinnerId).classList.remove('is-active');
     	    }
@@ -68,23 +136,9 @@ function makeRequest(url, method, data, customResponseHandler, spinnerId) {
     httpRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     httpRequest.setRequestHeader('X-CSRF-TOKEN', window.Laravel.csrfToken);
     if (method === 'POST') {
-    	httpRequest.setRequestHeader('Content-Type', 'application/json');
+    	httpRequest.setRequestHeader('Content-Type', contentType);
     }
     httpRequest.send(data);
-}
-
-function handleProfileSaveResponse(status, message) {
-	notice = document.getElementById("profile-save-notice");
-	if (status === 'success') {
-		console.log('YAAAAAAY!!!!');
-		notice.className = 'nsh-save-notice-success';
-		notice.innerHTML = 'Saved';
-		fade(notice, 150);
-	} else {
-		console.log('OOOHHHHHH!!!!');
-		notice.className = 'nsh-save-notice-error';
-		notice.innerHTML = 'Error';
-	}
 }
 
 function fade(element, interval) {

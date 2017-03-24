@@ -19,5 +19,6 @@ Auth::routes();
 
 Route::get('/account', 'AccountController@show')->name('account');
 Route::post('/account/profile/edit', 'AccountController@saveProfile');
+Route::post('/account/profile/image/upload', 'AccountController@saveProfileImage');
 
 

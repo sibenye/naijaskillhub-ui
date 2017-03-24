@@ -45,7 +45,6 @@ class ProfileService
     {
         $userId = Auth::user()->getAuthIdentifier();
         $authToken = session('nsh_authToken');
-        Log::info('PROFILE POST REQUEST: ' . json_encode($userProfile));
 
         $response = $this->apiService->saveUserAttributeValues($userId, $authToken, $userProfile);
 
@@ -53,8 +52,23 @@ class ProfileService
             return $response;
         }
 
+        return [ ];
+    }
+
+    public function saveUserProfileImage($image, $contentType)
+    {
+        $authToken = session('nsh_authToken');
+
+        $response = $this->apiService->uploadUserProfileImage($image, $contentType, $authToken);
+
+        if (!empty($response) && array_key_exists('error', $response)) {
+            return $response;
+        }
+
+        $fileSource = env('IMAGE_LOCATION_URL') . $response ['filePath'];
+
         return [
-                'status' => 'success'
+                'fileSrc' => $fileSource
         ];
     }
 }

@@ -31,6 +31,9 @@ class AccountController extends Controller
         $this->statesService = $statesService;
         $this->middleware('web');
         $this->middleware('auth');
+        $this->middleware('ajax', [
+                'except' => 'show'
+        ]);
     }
 
     /**
@@ -59,20 +62,41 @@ class AccountController extends Controller
      */
     public function saveProfile(Request $request)
     {
-        Log::info("REQUEST HEADER: " . json_encode($request->headers->all()));
-        if ($request->isXmlHttpRequest()) {
-            Log::info("IS JSON REQUEST");
-        }
-        Log::info("REQUEST: " . $request->input('firstName', NULL));
+        /*
+         * if ($request->isXmlHttpRequest()) {
+         *
+         * }
+         */
         $userProfile = $request->all();
         $response = $this->profileService->saveUserProfile($userProfile);
-        $httpStatus = 200;
+        return $response;
+    }
 
+    public function saveProfileImage(Request $request)
+    {
+        $image = $request->getContent();
+        $contentType = $request->header('Content-Type');
+
+        $response = $this->profileService->saveUserProfileImage($image, $contentType);
+        return $response;
+    }
+
+    private function returnResponse($response)
+    {
         if (array_key_exists('error', $response)) {
-            $httpStatus = 400;
+            return response()->json(
+                    [
+                            'status' => 'error',
+                            'message' => $response ['error'],
+                            'response' => NULL
+                    ], 400);
+        } else {
+            return response()->json(
+                    [
+                            'status' => 'success',
+                            'message' => NULL,
+                            'response' => $response
+                    ], 200);
         }
-        return response()->json([
-                'status' => 'success'
-        ], $httpStatus);
     }
 }

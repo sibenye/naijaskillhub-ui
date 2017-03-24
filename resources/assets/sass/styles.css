@@ -60,17 +60,7 @@ label {
 
 /* Mdl Overrides end */
 
-.nsh-right {
-    float: right;
-}
 
-.nsh-left {
-    float: left;
-}
-
-.nsh-divider {
-    height: 50px;
-}
 
 /* Navigation and Header - begin */
 .nsh-header-content {
@@ -108,7 +98,7 @@ label {
         height: 70px;
 }
 
-@media all and ( min-width: 450px ) {
+@media all and ( min-width: 550px ) {
     .nsh-navigation-title-image {
         background: url('images/nsh_logo_transparent.png') center / cover;
         width: 300px;
@@ -208,6 +198,8 @@ ul.nsh-navigation-menu-section-item {
 
 /* Navigation and Header - end */
 
+
+
 /* Custom css for mdl select component - Begin*/
 
 /* ==========  Select Field Variables ========== */
@@ -249,7 +241,7 @@ select:focus {
     top: 20px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 994px) {
     .nsh-dashboard-sidebar-fixed {
         position: fixed;
         top: 100px;
@@ -258,23 +250,50 @@ select:focus {
         margin-bottom: 0;
         background-color: #30343e;
         overflow-y: auto;
+        width: 25%;
     }
 }
 
 .nsh-dashboard-content {
     position: relative;
-    width: 90%px;
+    width: 90%;
 }
 
 @media (min-width: 450px) {
     .nsh-dashboard-content {
         position: relative;
-        width: 70%px;
+        width: 70%;
+    }
+}
+
+@media (min-width: 1500px) {
+    .nsh-dashboard-sidebar-fixed {
+        width: 20%;
     }
 }
 
 /* Dashboard - end */
 
+
+.nsh-right {
+    float: right;
+}
+
+.nsh-left {
+    float: left;
+}
+
+.nsh-divider {
+    height: 50px;
+}
+
+.nsh-hide {
+	display: none;
+}
+
+.nsh-show {
+    display: block;
+}
 
 .nsh-card-center.mdl-card {
     width: 80%;

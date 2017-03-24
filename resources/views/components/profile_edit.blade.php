@@ -99,20 +99,21 @@
     </div>
     <div class="nsh-card-content">
     <span >
-    <img @php echo 'src="'.env('IMAGE_LOCATION_URL').$viewBag['attributes']['profileImage'].'"'; @endphp width="80" height="87">
+    <img id="profile-image"  @php echo 'src="'.env('IMAGE_LOCATION_URL').$viewBag['attributes']['profileImage'].'"'; @endphp width="80" height="87" @php if(!$viewBag['attributes']['profileImage']): echo 'class="nsh-hide"'; endif; @endphp>
     </span>
     </div>
     <div class="mdl-card__actions">
     <div class="mdl-button mdl-button--accent mdl-button--file">
-      <span>
-          @if (!empty($viewBag['attributes']['profileImage']))
+      <span id="upload-text-change" @php if(!empty($viewBag['attributes']['profileImage'])): echo 'class="nsh-show"'; else: echo 'class="nsh-hide"'; endif; @endphp>
             Change Profile Image
-          @else
+      </span>
+      <span id="upload-text-add" @php if(empty($viewBag['attributes']['profileImage'])): echo 'class="nsh-show"'; else: echo 'class="nsh-hide"'; endif; @endphp>
             Add Profile Image
-          @endif
-      </span><input type="file" id="uploadBtn" onchange=uploadProfileImage()>
+      </span>
+      <input type="file" id="uploadProfileImageBtn">
     </div>
     <div id="mdl-spinner-profile-image" class="mdl-spinner mdl-spinner--single-color mdl-js-spinner"></div>
+    <span id="profile-image-save-notice" class=""></span>
     </div>
 
 </div>
