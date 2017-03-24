@@ -1,0 +1,39 @@
+{
+  "name": "naijaskillhub-ui",
+  "description": "Naija Skill Hub App",
+  "scripts": {
+    "postdeploycomposer": "composer install",
+    "postdeploynpm": "npm install"
+  },
+  "env": {
+		"APP_ENV": "local",
+		"APP_DEBUG": "true",
+		"APP_LOG_LEVEL": "debug",
+		"CACHE_DRIVER": "file",
+		"QUEUE_DRIVER": "sync",
+		"SESSION_DRIVER": "file",
+		"APP_KEY": {
+			"required": true
+		},
+		"APP_URL": {
+            "required": true
+        },
+        "NSH_API_BASE_URL": {
+            "required": true
+        },
+        "NSH_API_KEY": {
+            "required": true
+        },
+        "HTTPCLIENT_CONNECTION_TIMEOUT": {
+            "required": true
+        },
+        "IMAGE_LOCATION_URL": {
+            "required": true
+        }
+	},
+	"formation": {
+		
+	},
+	"addons": [],
+	"buildpacks": []
+}
