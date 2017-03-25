@@ -12,6 +12,9 @@
         "CACHE_DRIVER": "file",
         "QUEUE_DRIVER": "sync",
         "SESSION_DRIVER": "file",
+        "SESSION_LIFETIME": {
+            "required": true
+        },
         "APP_LOG": {
             "required": true
         },
