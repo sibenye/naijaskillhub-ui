@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
+                Fideloper\Proxy\TrustedProxyServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -226,5 +227,4 @@ return [
                 'Validator' => Illuminate\Support\Facades\Validator::class,
                 'View' => Illuminate\Support\Facades\View::class
         ]
-]
-;
+];
