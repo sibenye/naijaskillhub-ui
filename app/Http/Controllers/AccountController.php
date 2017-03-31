@@ -80,23 +80,4 @@ class AccountController extends Controller
         $response = $this->profileService->saveUserProfileImage($image, $contentType);
         return $response;
     }
-
-    private function returnResponse($response)
-    {
-        if (array_key_exists('error', $response)) {
-            return response()->json(
-                    [
-                            'status' => 'error',
-                            'message' => $response ['error'],
-                            'response' => NULL
-                    ], 400);
-        } else {
-            return response()->json(
-                    [
-                            'status' => 'success',
-                            'message' => NULL,
-                            'response' => $response
-                    ], 200);
-        }
-    }
 }
