@@ -22,11 +22,13 @@ class Ajax
 
         $response = $next($request);
 
-        if (array_key_exists('error', $response)) {
+        $originalContent = $response->getOriginalContent();
+
+        if (array_key_exists('error', $originalContent)) {
             return response()->json(
                     [
                             'status' => 'error',
-                            'message' => $response ['error'],
+                            'message' => $originalContent ['error'],
                             'response' => NULL
                     ], 400);
         } else {
@@ -34,7 +36,7 @@ class Ajax
                     [
                             'status' => 'success',
                             'message' => NULL,
-                            'response' => $response
+                            'response' => $originalContent
                     ], 200);
         }
     }

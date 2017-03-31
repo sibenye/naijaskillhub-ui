@@ -5,8 +5,12 @@
 var httpRequest;
 
 // define event listeners
-document.getElementById("profileSaveBtn").addEventListener("click", saveUserProfile, false);
-document.getElementById("uploadProfileImageBtn").addEventListener("change", uploadProfileImage, false);
+if (document.getElementById("profileSaveBtn") != undefined) {
+	document.getElementById("profileSaveBtn").addEventListener("click", saveUserProfile, false);
+}
+if (document.getElementById("uploadProfileImageBtn") != undefined) {
+	document.getElementById("uploadProfileImageBtn").addEventListener("change", uploadProfileImage, false);
+}
 
 /**
  * Handles user profile image upload.
