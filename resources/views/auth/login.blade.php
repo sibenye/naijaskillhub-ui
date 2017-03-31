@@ -13,49 +13,45 @@
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="email" id="email" name="email" value="{{ old('email') }}">
-                                    <label class="mdl-textfield__label" for="email">Email Address</label>
-                                </div>
-                                @if ($errors->has('email'))
-                                    <span class="mdl-textfield__error">
-                                        {{ $errors->first('email') }}
-                                    </span>
-                                @endif
+                               <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+                                <div class="col-md-6">
+                                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+
+                                    @if ($errors->has('email'))
+                                        <span class="mdl-textfield__error">
+                                            {{ $errors->first('email') }}
+                                        </span>
+                                    @endif
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="password" id="password" name="password">
-                                    <label class="mdl-textfield__label" for="password">Password</label>
+                                <label for="email" class="col-md-4 control-label">Password</label>
+                                <div class="col-md-6">
+                                    <input class="form-control" type="password" id="password" name="password" required>
 
-                                </div>
-
-                                @if ($errors->has('password'))
-                                    <span class="mdl-textfield__error">
-                                        {{ $errors->first('password') }}
-                                    </span>
-                                @endif
+                                    @if ($errors->has('password'))
+                                        <span class="mdl-textfield__error">
+                                            {{ $errors->first('password') }}
+                                        </span>
+                                    @endif
                             </div>
                         </div>
 
                         <div class="form-group">
-                        <div class="col-md-12">
-                        <div class="col-lg-6">
-                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
-                              <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                              <span class="mdl-checkbox__label">Remember Me</span>
-                            </label>
+                            <!-- <div class="col-md-6 col-md-offset-4">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
+                                    </label>
+                                </div>
+                            </div> -->
+                            <div class="col-md-6 col-md-offset-4">
+                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                     Forgot Your Password?
+                                </a>
+                            </div>
                         </div>
-                        <div class="col-lg-6">
-                            <a class="btn btn-link" href="{{ route('password.request') }}">
-                                Forgot Your Password?
-                            </a>
-                        </div>
-                        </div></div>
 
                         <div class="mdl-card__actions mdl-card--border">
                         <div class="row">

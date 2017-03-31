@@ -19,11 +19,10 @@
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="email" id="email" name="email" value="{{ old('email') }}">
-                                    <label class="mdl-textfield__label" for="email">Email Address</label>
-                                </div>
+                            <label class="col-md-4 control-label" for="email">Email Address</label>
+                            <div class="col-md-6">
+                                <input class="form-control" type="email" id="email" name="email" value="{{ old('email') }}" required>
+
                                 @if ($errors->has('email'))
                                     <span class="mdl-textfield__error">
                                         {{ $errors->first('email') }}

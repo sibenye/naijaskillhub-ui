@@ -10,37 +10,38 @@
             <div>
                 <div class="row">
                 <div class="col-md-6">
-                    <div>
-	                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-	                        <input class="mdl-textfield__input" type="text" id="profile-firstName" name="firstName" value="{{ $viewBag['attributes']['firstName'] }}">
-	                        <label class="mdl-textfield__label" for="profile-firstName">First name</label>
+                    <div class="form-group">
+	                    <div class="">
+                            <div><label class="control-label nsh-left" for="profile-firstName">First name</label></div>
+	                        <input class="form-control" type="text" id="profile-firstName" name="profile-firstName" value="{{ $viewBag['attributes']['firstName'] }}">
 	                    </div>
                    </div>
                 </div>
                 <div class="col-md-6">
-                    <div>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="text" id="profile-lastName" name="lastName" value="{{ $viewBag['attributes']['lastName'] }}">
-                            <label class="mdl-textfield__label" for="profile-lastName">Last name</label>
+                    <div class="form-group">
+                        <div class="">
+	                        <div><label class="control-label nsh-left" for="profile-lastName">Last name</label></div>
+	                        <input class="form-control" type="text" id="profile-lastName" name="profile-lastName" value="{{ $viewBag['attributes']['lastName'] }}">
                         </div>
                    </div>
                 </div>
                 </div>
                 <div class="row">
                 <div class="col-md-6">
-                   <div>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="text" id="profile-city" name="city" value="{{ $viewBag['attributes']['city'] }}">
-                            <label class="mdl-textfield__label" for="profile-city">City</label>
+                   <div class="form-group">
+                        <div class="">
+                            <div><label class="control-label nsh-left" for="profile-city">City</label></div>
+                            <input class="form-control" type="text" id="profile-city" name="profile-city" value="{{ $viewBag['attributes']['city'] }}">
+                            
                         </div>
                    </div>
                 </div>
                 <div class="col-md-6">
-                    <div>
-                        <div class="mdl-selectfield">
-                            <label>State</label>
-                            <select class="browser-default" name="state" id="profile-state">
-                              <option value="" disabled selected>State</option>
+                    <div class="form-group">
+                        <div class="">
+                            <div><label class="control-label nsh-left" for="profile-state">State</label></div>
+                            <select class="form-control" name="profile-state" id="profile-state">
+                              <option value="" disabled selected></option>
                                 @foreach ($viewBag['stateList'] as $stateSingle)
                                     @if ($stateSingle == $viewBag['attributes']['state'])
                                         <option value="{{ $stateSingle }}" selected>{{ $stateSingle }}</option>
@@ -56,11 +57,11 @@
                 </div>
                 <div class="row">
                 <div class="col-md-6">
-                    <div>
-                        <div class="mdl-selectfield">
-                            <label>Gender</label>
-                            <select class="browser-default" name="gender" id="profile-gender">
-                              <option value="" disabled selected>Gender</option>
+                    <div class="form-group">
+                        <div class="">
+                            <div><label class="control-label nsh-left" for="profile-gender">Gender</label></div>
+                            <select class="form-control" name="profile-gender" id="profile-gender">
+                              <option value="" disabled selected></option>
                               <option value="Male" @php if($viewBag['attributes']['gender'] == 'Male'): echo 'selected'; endif; @endphp>Male</option>
                               <option value=Female" @php if($viewBag['attributes']['gender'] == 'Female'): echo 'selected'; endif; @endphp>Female</option>
                             </select>
@@ -68,10 +69,10 @@
                    </div>
                 </div>
                 <div class="col-md-6">
-                   <div>
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="number" id="profile-yob" name="yob" value="{{ $viewBag['attributes']['yob'] }}">
-                            <label class="mdl-textfield__label" for="profile-yob">Year of birth</label>
+                   <div class="form-group">
+                        <div class="">
+                            <div><label class="control-label nsh-left" for="profile-yob">Year of birth</label></div>
+                            <input class="form-control" type="number" id="profile-yob" name="profile-yob" value="{{ $viewBag['attributes']['yob'] }}">
                         </div>
                    </div>
                 </div>

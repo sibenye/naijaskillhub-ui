@@ -21,26 +21,22 @@
                         <input type="hidden" name="token" value="{{ $token }}">
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="email" id="email" name="email" value="{{ old('email') }}">
-                                    <label class="mdl-textfield__label" for="email">Email Address</label>
-                                </div>
+                            <label class="col-md-4 control-label" for="email">Email Address</label>
+                            <div class="col-md-6">
+                                <input class="form-control" type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
+
                                 @if ($errors->has('email'))
                                     <span class="mdl-textfield__error">
                                         {{ $errors->first('email') }}
                                     </span>
                                 @endif
-                            </div>
+                        </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="password" id="password" name="password">
-                                    <label class="mdl-textfield__label" for="password">Password</label>
-
-                                </div>
+                            <label class="col-md-4 control-label" for="password">Password</label>
+                            <div class="col-md-6">
+                                <input class="form-control" type="password" id="password" name="password" required>
 
                                 @if ($errors->has('password'))
                                     <span class="mdl-textfield__error">
@@ -51,12 +47,9 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input id="password-confirm" class="mdl-textfield__input" type="password" id="password" name="password_confirmation">
-                                    <label class="mdl-textfield__label" for="password">Confirm Password</label>
-
-                                </div>
+                            <label class="col-md-4 control-label" for="password">Confirm Password</label>
+                                <div class="col-md-6">
+                                    <input id="password-confirm" class="form-control" type="password" id="password" name="password_confirmation" required>
                             </div>
                         </div>
 

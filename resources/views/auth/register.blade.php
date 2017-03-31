@@ -17,84 +17,73 @@
                         {{ csrf_field() }}
 
                         <div class="form-group">
-                            <div>
-                                <div class="mdl-selectfield">
-                                    <label>Member Type</label>
-                                    <select class="browser-default" id="accountType" name="accountType">
-                                      <option value="" disabled selected>Member Type</option>
-                                      <option value="talent">Talent</option>
-                                      <option value="hunter">Hunter</option>
-                                    </select>
-                                  </div>
+                            <label class="col-md-4 control-label" for="accountType">Member Type</label>
+
+                            <div class="col-md-6">
+                                <select class="form-control" id="accountType" name="accountType">
+                                  <option value="talent">Talent</option>
+                                  <option value="hunter">Hunter</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('firstName') ? ' has-error' : '' }}">
-                            <div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="firstName" name="firstName" value="{{ old('firstName') }}">
-                                    <label class="mdl-textfield__label" for="firstName">First Name</label>
-                                </div>
-                                @if ($errors->has('firstName'))
-                                    <span class="mdl-textfield__error">
-                                        {{ $errors->first('firstName') }}
-                                    </span>
-                                @endif
+                                <label class="col-md-4 control-label" for="firstName">First Name</label>
+                                <div class="col-md-6">
+                                    <input class="form-control" type="text" id="firstName" name="firstName" value="{{ old('firstName') }}" required>
+
+                                    @if ($errors->has('firstName'))
+                                        <span class="mdl-textfield__error">
+                                            {{ $errors->first('firstName') }}
+                                        </span>
+                                    @endif
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('lastName') ? ' has-error' : '' }}">
-                            <div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="lastName" name="lastName" value="{{ old('lastName') }}">
-                                    <label class="mdl-textfield__label" for="lastName">Last Name</label>
-                                </div>
-                                @if ($errors->has('lastName'))
-                                    <span class="mdl-textfield__error">
-                                        {{ $errors->first('lastName') }}
-                                    </span>
-                                @endif
+                                <label class="col-md-4 control-label" for="lastName">Last Name</label>
+                                <div class="col-md-6">
+                                    <input class="form-control" type="text" id="lastName" name="lastName" value="{{ old('lastName') }}" required>
+
+                                    @if ($errors->has('lastName'))
+                                        <span class="mdl-textfield__error">
+                                            {{ $errors->first('lastName') }}
+                                        </span>
+                                    @endif
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="email" id="email" name="email" value="{{ old('email') }}">
-                                    <label class="mdl-textfield__label" for="email">Email Address</label>
-                                </div>
-                                @if ($errors->has('email'))
-                                    <span class="mdl-textfield__error">
-                                        {{ $errors->first('email') }}
-                                    </span>
-                                @endif
+                                <label class="col-md-4 control-label" for="email">Email Address</label>
+                                <div class="col-md-6">
+                                    <input class="form-control" type="email" id="email" name="email" value="{{ old('email') }}" placeholder="example@domain.com" required>
+
+                                    @if ($errors->has('email'))
+                                        <span class="mdl-textfield__error">
+                                            {{ $errors->first('email') }}
+                                        </span>
+                                    @endif
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="password" id="password" name="password">
-                                    <label class="mdl-textfield__label" for="password">Password</label>
+                                <label class="col-md-4 control-label" for="password">Password</label>
+                                <div class="col-md-6">
+                                    <input class="form-control" type="password" id="password" name="password" required>
 
-                                </div>
-
-                                @if ($errors->has('password'))
-                                    <span class="mdl-textfield__error">
-                                        {{ $errors->first('password') }}
-                                    </span>
-                                @endif
+                                    @if ($errors->has('password'))
+                                        <span class="mdl-textfield__error">
+                                            {{ $errors->first('password') }}
+                                        </span>
+                                    @endif
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <div>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input id="password-confirm" class="mdl-textfield__input" type="password" id="password" name="password_confirmation">
-                                    <label class="mdl-textfield__label" for="password">Confirm Password</label>
-
+                                <label class="col-md-4 control-label" for="password">Confirm Password</label>
+                                <div class="col-md-6">
+                                    <input id="password-confirm" class="form-control" type="password" id="password" name="password_confirmation" required>
                                 </div>
-                            </div>
                         </div>
                         <input type="hidden" id="credentialType" name="credentialType" value="standard">
 
