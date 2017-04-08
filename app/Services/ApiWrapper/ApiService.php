@@ -93,6 +93,11 @@ class ApiService
         return $this->sendRequest('register', $params, 'POST', [ ], true);
     }
 
+    /**
+     *
+     * @param int $id
+     * @return NULL|\App\Models\User
+     */
     public function getUserModelById($id)
     {
         $userResponse = $this->getUserById($id);
@@ -106,6 +111,11 @@ class ApiService
         return $userModel;
     }
 
+    /**
+     *
+     * @param string $email
+     * @return NULL|\App\Models\User
+     */
     public function getUserModelByEmailAddress($email)
     {
         $userResponse = $this->getUserByEmailAddress($email);
@@ -187,9 +197,92 @@ class ApiService
     {
         $endpoint = 'upload/profileImage';
         $headerOptions = $this->buildAuthHeader($authToken);
-        $headerOptions ['Content-Type'] = $contentType;
 
-        return $this->sendRequest($endpoint, $image, 'POST', $headerOptions);
+        $params = [
+                [
+                        'name' => 'file',
+                        'contents' => $image
+                ],
+                [
+                        'name' => 'uploadContentType',
+                        'contents' => $contentType
+                ]
+        ];
+
+        return $this->sendRequest($endpoint, $params, 'POST', $headerOptions, false, true);
+    }
+
+    /**
+     *
+     * @param int $userId
+     * @return array
+     */
+    public function getUserPortfolio($userId)
+    {
+        $endpoint = 'users/' . $userId . '/portfolios';
+
+        return $this->sendRequest($endpoint, [ ], 'GET');
+    }
+
+    /**
+     *
+     * @param int $userId
+     * @return array
+     */
+    public function getUserImagePortfolio($userId)
+    {
+        $endpoint = 'users/' . $userId . '/portfolios/images';
+
+        return $this->sendRequest($endpoint, [ ], 'GET');
+    }
+
+    /**
+     *
+     * @param string $image
+     * @param string $contentType
+     * @param string $authToken
+     * @param string $location
+     */
+    public function uploadUserPortfolioImage($image, $contentType, $authToken, $caption)
+    {
+        $endpoint = 'upload/portfolio/image';
+        $headerOptions = $this->buildAuthHeader($authToken);
+
+        $params = [
+                [
+                        'name' => 'file',
+                        'contents' => $image
+                ],
+                [
+                        'name' => 'uploadContentType',
+                        'contents' => $contentType
+                ],
+                [
+                        'name' => 'caption',
+                        'contents' => $caption
+                ]
+        ];
+
+        return $this->sendRequest($endpoint, $params, 'POST', $headerOptions, false, true);
+    }
+
+    /**
+     *
+     * @param int $userId
+     * @param string $authToken
+     * @param string $caption
+     * @param string $imageType
+     * @param int $imageId
+     */
+    public function savePortfolioImageMetaData($userId, $authToken, $caption, $imageId)
+    {
+        $endpoint = '/users/' . $userId . '/portfolios/images';
+        $headerOptions = $this->buildAuthHeader($authToken);
+        $params = [ ];
+        $params ['caption'] = $caption;
+        $params ['imageId'] = $imageId;
+
+        return $this->sendRequest($endpoint, $params, 'POST', $headerOptions, true);
     }
 
     /**
@@ -235,7 +328,7 @@ class ApiService
      * @return array
      */
     private function sendRequest($endpoint, $params, $method = 'GET', array $headerOptions = [],
-            $isJsonData = false)
+            $isJsonData = false, $isMultipart = false)
     {
         $headerOptions [Config::get('constants.apiKey_header_name')] = $this->apiKey;
         $clientOptions = [ ];
@@ -245,7 +338,7 @@ class ApiService
 
         try {
             $response = $this->httpClient->makeRequest($endpoint, $params, $method, $clientOptions,
-                    $isJsonData);
+                    $isJsonData, $isMultipart);
 
             $responseArray = $this->convertToAssociativeArray($response->getBody()) ['response'];
             Log::info('RESPONSE: ' . $response->getBody());

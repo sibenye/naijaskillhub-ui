@@ -100,7 +100,7 @@
     </div>
     <div class="nsh-card-content">
     <span >
-    <img id="profile-image"  @php echo 'src="'.env('IMAGE_LOCATION_URL').$viewBag['attributes']['profileImage'].'"'; @endphp width="80" height="87" @php if(!$viewBag['attributes']['profileImage']): echo 'class="nsh-hide"'; endif; @endphp>
+    <img id="profile-image"  @php echo 'src="'.$viewBag['attributes']['profileImage'].'"'; @endphp width="80" height="87" @php if(!$viewBag['attributes']['profileImage']): echo 'class="nsh-hide"'; endif; @endphp>
     </span>
     </div>
     <div class="mdl-card__actions">

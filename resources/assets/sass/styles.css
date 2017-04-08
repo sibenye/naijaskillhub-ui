@@ -94,6 +94,10 @@ label {
   }
 }
 
+.mdl-card__media > img {
+  max-width: 100%;
+}
+
 /* Mdl Overrides end */
 
 
@@ -335,6 +339,63 @@ select:focus {
 }
 
 /* Dashboard - end */
+
+/* Portfolio Image Section - Begin */
+.nsh-portfolioImage-edit-list > div {
+  font-size: 16px;
+  overflow: hidden;
+  display: inline-block;
+  margin-bottom: 8px;
+  width: calc(50% - 4px);
+  margin-right: 8px;
+  vertical-align:top
+}
+
+.nsh-portfolioImage-edit-list > div:nth-of-type(2n) {
+  margin-right: 0;
+}
+
+@media screen and (min-width: 50em) {
+  .nsh-portfolioImage-edit-list > div {
+    width: calc(25% - 6px);
+  }
+  
+  .nsh-portfolioImage-edit-list > div:nth-of-type(2n) {
+    margin-right: 8px;
+  }
+  
+  .nsh-portfolioImage-edit-list > div:nth-of-type(4n) {
+    margin-right: 0;
+  }
+}
+
+.nsh-portfolioImage-edit-list > div > a:hover img {
+  transform: scale(1.15);
+}
+
+.nsh-portfolioImage-edit-list figure {
+  margin: 0;
+}
+
+.nsh-portfolioImage-edit-list img {
+  border: none;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  background: #ccc;
+  transition: transform .2s ease-in-out;
+}
+
+figure {
+  margin: 0;
+  overflow: hidden;
+}
+
+figcaption {
+  margin-top: 15px;
+}
+
+/* Portfolio Image Section - End */
 
 
 .nsh-right {
