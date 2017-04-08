@@ -35,7 +35,13 @@ class ProfileService
         $profileAttributes = [ ];
 
         foreach ($attributes as $attribute) {
-            $profileAttributes [$attribute ['attributeName']] = $attribute ['attributeValue'];
+
+            if ($attribute ['attributeName'] == 'profileImage') {
+                $profileAttributes [$attribute ['attributeName']] = env('STATIC_FILES_LOCATION_URL') .
+                         $attribute ['attributeValue'];
+            } else {
+                $profileAttributes [$attribute ['attributeName']] = $attribute ['attributeValue'];
+            }
         }
 
         return $profileAttributes;
@@ -65,7 +71,7 @@ class ProfileService
             return $response;
         }
 
-        $fileSource = env('IMAGE_LOCATION_URL') . $response ['filePath'];
+        $fileSource = env('STATIC_FILES_LOCATION_URL') . $response ['filePath'];
 
         return [
                 'fileSrc' => $fileSource

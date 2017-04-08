@@ -71,13 +71,16 @@ class HttpClient extends Client
      * @return Response
      * @throws GuzzleHttp\Exception\RequestException
      */
-    public function makeRequest($endpoint, $params, $method = self::GET, $options = [], $isJsonData = false)
+    public function makeRequest($endpoint, $params, $method = self::GET, $options = [], $isJsonData = false,
+            $isMultipart = false)
     {
         $this->defaultOptions = array_merge($this->defaultOptions, $options);
 
         if ($method == self::POST) {
             if ($isJsonData) {
                 $this->defaultOptions ['json'] = $params;
+            } else if ($isMultipart) {
+                $this->defaultOptions ['multipart'] = $params;
             } else {
                 $this->defaultOptions ['body'] = $params;
             }

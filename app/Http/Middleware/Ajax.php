@@ -24,20 +24,22 @@ class Ajax
 
         $originalContent = $response->getOriginalContent();
 
-        if (array_key_exists('error', $originalContent)) {
+        if (is_array($originalContent) && array_key_exists('error', $originalContent)) {
             return response()->json(
                     [
                             'status' => 'error',
                             'message' => $originalContent ['error'],
                             'response' => NULL
                     ], 400);
-        } else {
+        } else if (is_array($originalContent)) {
             return response()->json(
                     [
                             'status' => 'success',
                             'message' => NULL,
                             'response' => $originalContent
                     ], 200);
+        } else {
+            return $response;
         }
     }
 }

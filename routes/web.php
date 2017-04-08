@@ -17,8 +17,20 @@ Auth::routes();
 
 // Route::post('/login', 'Auth\LoginController@authenticate');
 
-Route::get('/account', 'AccountController@show')->name('account');
-Route::post('/account/profile/edit', 'AccountController@saveProfile');
-Route::post('/account/profile/image/upload', 'AccountController@saveProfileImage');
+// Account route
+Route::get('/account/dashboard', 'Account\DashboardController@show')->name('account');
+Route::get('/account/dashboard/portfolio/image/add',
+        'Account\DashboardController@addPortfolioImage')->name('add-portfolio-image');
+Route::get('/account/dashboard/portfolio/image/edit/{imageId}',
+        'Account\DashboardController@editPortfolioImage')->name('edit-portfolio-image');
+
+Route::post('/account/dashboard/profile/edit', 'Account\DashboardController@saveProfile');
+Route::post('/account/dashboard/profile/image/upload',
+        'Account\DashboardController@saveProfileImage');
+Route::post('/account/dashboard/portfolio/image/upload',
+        'Account\DashboardController@savePortfolioImage')->name('save-portfolio-image');
+Route::post('/account/dashboard/portfolio/image/update',
+        'Account\DashboardController@updatePortfolioImage')->name('update-portfolio-image');
+
 
 

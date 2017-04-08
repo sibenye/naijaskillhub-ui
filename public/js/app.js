@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 44);
+/******/ 	return __webpack_require__(__webpack_require__.s = 45);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -11190,6 +11190,7 @@ module.exports = g;
  */
 
 __webpack_require__(33);
+__webpack_require__(34);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -11197,7 +11198,7 @@ __webpack_require__(33);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', __webpack_require__(39));
+Vue.component('example', __webpack_require__(40));
 
 var app = new Vue({
   el: '#app'
@@ -11217,10 +11218,10 @@ var app = new Vue({
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(35);
+var content = __webpack_require__(36);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(38)(content, {});
+var update = __webpack_require__(39)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -12111,7 +12112,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(37);
+window._ = __webpack_require__(38);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -12121,7 +12122,7 @@ window._ = __webpack_require__(37);
 
 window.$ = window.jQuery = __webpack_require__(8);
 
-__webpack_require__(34);
+__webpack_require__(35);
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -12129,7 +12130,7 @@ __webpack_require__(34);
  * and simple, leaving you to focus on building your next great project.
  */
 
-window.Vue = __webpack_require__(42);
+window.Vue = __webpack_require__(43);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -12159,6 +12160,23 @@ window.axios.defaults.headers.common = {
 
 /***/ }),
 /* 34 */
+/***/ (function(module, exports) {
+
+/**
+* Below are Polyfill functions for Browser backward compatibility
+*/
+
+if (!Object.keys) Object.keys = function (o) {
+  if (o !== Object(o)) throw new TypeError('Object.keys called on a non-object');
+  var k = [],
+      p;
+  for (p in o) {
+    if (Object.prototype.hasOwnProperty.call(o, p)) k.push(p);
+  }return k;
+};
+
+/***/ }),
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/*!
@@ -14542,14 +14560,14 @@ if (typeof jQuery === 'undefined') {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(36)();
+exports = module.exports = __webpack_require__(37)();
 exports.push([module.i, "// removed by extract-text-webpack-plugin", ""]);
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 /*
@@ -14605,7 +14623,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -31694,10 +31712,10 @@ module.exports = function() {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(43)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(44)(module)))
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports) {
 
 /*
@@ -31949,14 +31967,14 @@ function updateLink(linkElement, obj) {
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(40)(
+var Component = __webpack_require__(41)(
   /* script */
   __webpack_require__(32),
   /* template */
-  __webpack_require__(41),
+  __webpack_require__(42),
   /* scopeId */
   null,
   /* cssModules */
@@ -31983,7 +32001,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports) {
 
 module.exports = function normalizeComponent (
@@ -32036,7 +32054,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -32065,7 +32083,7 @@ if (false) {
 }
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41266,7 +41284,7 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(9)))
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -41294,7 +41312,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(10);
