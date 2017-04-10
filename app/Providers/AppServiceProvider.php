@@ -6,6 +6,7 @@ use App\Utilities\HttpClient;
 use App\Services\ApiWrapper\ApiService;
 use App\Services\Account\ProfileService;
 use App\Services\StatesService;
+use App\Utilities\DropboxClientWrapper;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,9 +33,15 @@ class AppServiceProvider extends ServiceProvider
                     return new ApiService(new HttpClient());
                 });
 
+        $this->app->singleton('App\Utilities\DropboxClientClientWrapper',
+                function ($app) {
+                    return new DropboxClientWrapper();
+                });
+
         $this->app->bind('App\Services\Account\ProfileService',
                 function ($app) {
-                    return new ProfileService($app->make('App\Services\Api\ApiService'));
+                    return new ProfileService($app->make('App\Services\Api\ApiService'),
+                        $app->make('App\Utilities\DropboxClientClientWrapper'));
                 });
 
         $this->app->bind('App\Services\StatesService',
