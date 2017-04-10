@@ -5,6 +5,7 @@ use App\Services\ApiWrapper\ApiService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\UploadedFile;
+use App\Utilities\DropboxClientWrapper;
 
 class PortfolioService
 {
@@ -14,9 +15,16 @@ class PortfolioService
      */
     private $apiService;
 
-    public function __construct(ApiService $apiService)
+    /**
+     *
+     * @var DropboxClientWrapper
+     */
+    private $dropboxClient;
+
+    public function __construct(ApiService $apiService, DropboxClientWrapper $dropboxClient)
     {
         $this->apiService = $apiService;
+        $this->dropboxClient = $dropboxClient;
     }
 
     public function getUserImagePortfolio($imageId = NULL)
@@ -100,7 +108,7 @@ class PortfolioService
             return $saveImageResponse;
         }
 
-        $fileSource = env('STATIC_FILES_LOCATION_URL') . $saveImageResponse ['filePath'];
+        $fileSource = $this->dropboxClient->getFileSource($saveImageResponse ['filePath']);
 
         $response ['fileSrc'] = $fileSource;
 
@@ -123,7 +131,6 @@ class PortfolioService
 
         $response = [ ];
         $response ['imageId'] = $metadataResponse ['imageId'];
-        $response ['fileSrc'] = env('STATIC_FILES_LOCATION_URL') . $metadataResponse ['filePath'];
         $response ['caption'] = $metadataResponse ['caption'];
 
         return $response;
@@ -147,8 +154,8 @@ class PortfolioService
         foreach ($images as $key => $value) {
             $imagesResponse [$key] ['imageId'] = $value ['imageId'];
             $imagesResponse [$key] ['caption'] = $value ['caption'];
-            $imagesResponse [$key] ['fileSrc'] = env('STATIC_FILES_LOCATION_URL') .
-                     $value ['filePath'];
+            $imagesResponse [$key] ['fileSrc'] = $this->dropboxClient->getFileSource(
+                    $value ['filePath']);
         }
 
         return $imagesResponse;
@@ -174,8 +181,8 @@ class PortfolioService
         foreach ($audios as $key => $value) {
             $audiosResponse [$key] ['audioId'] = $value ['audioId'];
             $audiosResponse [$key] ['caption'] = $value ['caption'];
-            $audiosResponse [$key] ['fileSrc'] = env('STATIC_FILES_LOCATION_URL') .
-                     $value ['filePath'];
+            $audiosResponse [$key] ['fileSrc'] = $this->dropboxClient->getFileSource(
+                    $value ['filePath']);
         }
 
         $audiosResponse;

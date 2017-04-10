@@ -4,6 +4,7 @@ namespace App\Services\Account;
 use App\Services\ApiWrapper\ApiService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Utilities\DropboxClientWrapper;
 
 class ProfileService
 {
@@ -13,9 +14,16 @@ class ProfileService
      */
     private $apiService;
 
-    public function __construct(ApiService $apiService)
+    /**
+     *
+     * @var DropboxClientWrapper
+     */
+    private $dropboxClient;
+
+    public function __construct(ApiService $apiService, DropboxClientWrapper $dropboxClient)
     {
         $this->apiService = $apiService;
+        $this->dropboxClient = $dropboxClient;
     }
 
     public function getProfileAttributes()
@@ -37,8 +45,8 @@ class ProfileService
         foreach ($attributes as $attribute) {
 
             if ($attribute ['attributeName'] == 'profileImage') {
-                $profileAttributes [$attribute ['attributeName']] = env('STATIC_FILES_LOCATION_URL') .
-                         $attribute ['attributeValue'];
+                $profileAttributes [$attribute ['attributeName']] = $this->dropboxClient->getFileSource(
+                        $attribute ['attributeValue']);
             } else {
                 $profileAttributes [$attribute ['attributeName']] = $attribute ['attributeValue'];
             }
