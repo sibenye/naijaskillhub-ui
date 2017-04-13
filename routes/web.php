@@ -32,5 +32,8 @@ Route::post('/account/dashboard/portfolio/image/upload',
 Route::post('/account/dashboard/portfolio/image/update',
         'Account\DashboardController@updatePortfolioImage')->name('update-portfolio-image');
 
+Route::delete('/account/dashboard/portfolio/image',
+        'Account\DashboardController@deletePortfolioImage');
+
 
 

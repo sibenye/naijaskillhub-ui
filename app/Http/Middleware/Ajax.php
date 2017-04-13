@@ -30,7 +30,7 @@ class Ajax
                             'status' => 'error',
                             'message' => $originalContent ['error'],
                             'response' => NULL
-                    ], 400);
+                    ], $response->status() === 200 ? 400 : $response->status());
         } else if (is_array($originalContent)) {
             return response()->json(
                     [

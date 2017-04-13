@@ -4,6 +4,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Auth;
 
 class Handler extends ExceptionHandler
 {
@@ -61,6 +62,12 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        Auth::guard()->logout();
+
+        $request->session()->flush();
+
+        $request->session()->regenerate();
+
         if ($request->expectsJson()) {
             return response()->json(
                     [

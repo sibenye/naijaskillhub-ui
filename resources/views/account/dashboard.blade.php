@@ -2,6 +2,10 @@
 
 @section('title', 'My Account')
 
+@push('nsh-scripts')
+    <script src="{{ asset('js/nsh-dashboard-page-functions.js') }}"></script>
+@endpush
+
 @section('content')
 <div class="container">
 <div class="row">

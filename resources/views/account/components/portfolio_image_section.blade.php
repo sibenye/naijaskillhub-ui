@@ -19,9 +19,9 @@
                             </a>
                             <input id="imageId-{{ $image['imageId'] }}" type="hidden" value="{{ $image['imageId'] }}">
                             
-                            <div id="imageBlockFooter-{{ $image['imageId'] }}">
-                            <span class="nsh-left"><i class="material-icons">&#xE92B;</i></span>
-                            <a href="{{ route('edit-portfolio-image', ['imageId' => $image['imageId']]) }}" ><span class="nsh-right"><i class="material-icons">&#xE3C9;</i></span></a>
+                            <div id="imageBlockFooter">
+                            <span id="deleteImageBtn-{{ $image['imageId'] }}" class="nsh-left" onclick="deletePortfolioImage({{ $image['imageId'] }})"><i class="material-icons">&#xE92B;</i></span>
+                            <span class="nsh-right" onclick="editPortfolioImage({{ $image['imageId'] }})"><i class="material-icons">&#xE3C9;</i></span>
                             </div>
                         </div>
                     @endforeach

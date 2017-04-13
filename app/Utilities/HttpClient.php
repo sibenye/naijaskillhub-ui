@@ -27,6 +27,12 @@ class HttpClient extends Client
 
     /**
      *
+     * @var string
+     */
+    const DELETE = 'DELETE';
+
+    /**
+     *
      * @var array
      */
     private $defaultOptions = [ ];
@@ -84,7 +90,7 @@ class HttpClient extends Client
             } else {
                 $this->defaultOptions ['body'] = $params;
             }
-        } else {
+        } else if ($method == self::GET) {
             $this->defaultOptions ['query'] = $params;
         }
 

@@ -136,6 +136,25 @@ class PortfolioService
         return $response;
     }
 
+    /**
+     * Delete user's portfolio image.
+     *
+     * @param int $imageId
+     */
+    public function deleteUserPortfolioImage($imageId)
+    {
+        $userId = Auth::user()->getAuthIdentifier();
+        $authToken = session('nsh_authToken');
+
+        $response = $this->apiService->deleteUserPortfolioImage($imageId, $userId, $authToken);
+
+        if ($response == null) {
+            $response = [ ];
+        }
+
+        return $response;
+    }
+
     private function savePortfolioImageMetadata($caption, $imageId)
     {
         $userId = Auth::user()->getAuthIdentifier();

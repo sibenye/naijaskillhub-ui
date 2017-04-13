@@ -77,6 +77,17 @@
                    </div>
                 </div>
                 </div>
+                <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="">
+                            <div><label class="control-label nsh-left" for="profile-bio">Bio</label></div>
+                            <textarea class="form-control" rows="10" maxlength="1000" wrap="hard" id="profile-bio" name="profile-bio" placeholder="Tell us a bit about yourself, preferably in the third person.">{{ $viewBag['attributes']['bio'] }}</textarea>
+                        </div>
+                   </div>
+                </div>
+                
+                </div>
             </div>
         </form>
         </div>
