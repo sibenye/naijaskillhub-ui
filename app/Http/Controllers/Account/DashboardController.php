@@ -8,6 +8,7 @@ use App\Services\Account\PortfolioService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PortfolioImageAddRequest;
 use App\Http\Requests\PortfolioImageEditRequest;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -109,11 +110,6 @@ class DashboardController extends Controller
      */
     public function saveProfile(Request $request)
     {
-        /*
-         * if ($request->isXmlHttpRequest()) {
-         *
-         * }
-         */
         $userProfile = $request->all();
         $response = $this->profileService->saveUserProfile($userProfile);
         return $response;
@@ -175,5 +171,20 @@ class DashboardController extends Controller
         }
 
         return redirect()->route('account');
+    }
+
+    /**
+     * Delete user's portfolio image.
+     *
+     * @param Request $request
+     */
+    public function deletePortfolioImage(Request $request)
+    {
+        $imageId = $request->get('imageId');
+        Log::info('IMAGEID: ' . $imageId);
+
+        $response = $this->portfolioService->deleteUserPortfolioImage($imageId);
+
+        return $response;
     }
 }

@@ -1,10 +1,13 @@
 /**
- * Below are customs functions for the NSH App
+ * Below are functions for the dashboard page
  */
+
 //define variables
 var httpRequest;
+var imageIdForDelete = null;
 
 /* define event listeners */
+
 if (document.getElementById("profileSaveBtn") != undefined) {
 	document.getElementById("profileSaveBtn").addEventListener("click", saveUserProfile, false);
 }
@@ -16,6 +19,48 @@ if (document.getElementById("portfolioImageUploadSelection") != undefined) {
 }
 
 /* define event listeners - end */
+
+/* edit portfolio image */
+editPortfolioImage = function (imageId) {
+	//just go to the edit page
+	window.location.href = window.location.protocol +'//' + window.location.hostname +"/account/dashboard/portfolio/image/edit/"+imageId;
+}
+/* edit portfolio image - end */
+
+/* delete portfolio image */
+deletePortfolioImage = function (imageId) {
+	var data = {imageId: imageId};
+	imageIdForDelete = imageId;
+	var endpoint = 'dashboard/portfolio/image?imageId='+imageId;
+	//start spinner
+	startGlobalSpinner();
+	makeRequest(endpoint, 'DELETE', null, handlePortfolioImageDeleteResponse, null);
+}
+
+function handlePortfolioImageDeleteResponse(status, message) {
+	
+	if(status === 'success') {
+		console.log(message);
+		//remove image block
+		removeImageBlock(imageIdForDelete);
+	} else {
+		console.error(message);
+	}
+	imageIdForDelete = null;
+	stopGlobalSpinner();
+	
+}
+
+function removeImageBlock(imageId) {
+	if (imageId !== null) {
+		var imageList = document.getElementById('portfolioImageList');
+		var imageBlock = document.getElementById('imageBlock-'+imageId);
+		imageList.removeChild(imageBlock);
+	}
+	
+}
+
+/* delete portfolio image - end */
 
 /* display portfolio image selected */
 function displaySelectedPortfolioImage() {
@@ -85,6 +130,7 @@ function saveUserProfile() {
 	var state = document.getElementById("profile-state").value;
 	var gender = document.getElementById("profile-gender").value;
 	var yob = document.getElementById("profile-yob").value;
+	var bio = document.getElementById("profile-bio").value;
 	
 	var formElement = document.getElementById("profile-edit-form");
 	
@@ -94,7 +140,8 @@ function saveUserProfile() {
 			city: city,
 			state: state,
 			gender: gender,
-			yob: yob
+			yob: yob,
+			bio: bio
 	};
 	console.log(formData);
 	
@@ -120,88 +167,3 @@ function handleProfileSaveResponse(status, message) {
 		notice.innerHTML = 'Error';
 	}
 }
-
-/**
- * Make Ajax request.
- * 
- * @param url
- * @param method
- * @param data
- * @param customResponseHandler
- * @param spinnerId
- * @returns
- */
-function makeRequest(url, method, data, customResponseHandler = null, spinnerId = null, contentType = 'application/json', headers = null) {
-    httpRequest = new XMLHttpRequest();
-
-    if (!httpRequest) {
-      console.error('Giving up :( Cannot create an XMLHTTP instance');
-      return false;
-    }
-    
-    httpRequest.onreadystatechange = function() {
-    	if (httpRequest.readyState === XMLHttpRequest.DONE) {
-    	      if (httpRequest.status === 200) {
-    	    	  console.log(httpRequest.responseText);
-    	    	  response = JSON.parse(httpRequest.responseText);
-    	    	  if (customResponseHandler !== undefined) {
-    	    		  customResponseHandler('success', response.response);
-    	    	  }
-    	    	  console.log(response.status);
-    	      } else {
-    	    	  console.log(httpRequest.responseText);
-    	    	  response = JSON.parse(httpRequest.responseText);
-    	    	  if (customResponseHandler !== null) {
-    	    		  customResponseHandler('error', response.message);
-    	    	  }
-    	    	  console.error(response.message);
-    	      }
-    	      if (spinnerId !== null) {
-    	    	  document.getElementById(spinnerId).classList.remove('is-active');
-    	      }
-    	      
-    	    }
-    };
-    
-    httpRequest.open(method, url);
-    httpRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    httpRequest.setRequestHeader('X-CSRF-TOKEN', window.Laravel.csrfToken);
-    if (headers !== null) {
-    	Object.keys(headers).forEach(function(key) {
-        	httpRequest.setRequestHeader(key, headers[key]);
-        });
-    }
-    
-    if (method === 'POST' && contentType !== false) {
-    	httpRequest.setRequestHeader('Content-Type', contentType);
-    }
-    httpRequest.send(data);
-}
-
-function fade(element, interval) {
-    var op = 1;  // initial opacity
-    element.style.display = 'inline';
-    var timer = setInterval(function () {
-        if (op <= 0.1){
-            clearInterval(timer);
-            element.style.display = 'none';
-        }
-        element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        op -= op * 0.1;
-    }, interval);
-}
-
-function unfade(element, interval) {
-    var op = 0.1;  // initial opacity
-    element.style.display = 'block';
-    var timer = setInterval(function () {
-        if (op >= 1){
-            clearInterval(timer);
-        }
-        element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        op += op * 0.1;
-    }, interval);
-}
-

@@ -286,6 +286,22 @@ class ApiService
     }
 
     /**
+     * Delete a user's portfolio image.
+     *
+     * @param int $imageId
+     * @param int $userId
+     * @param string $authToken
+     */
+    public function deleteUserPortfolioImage($imageId, $userId, $authToken)
+    {
+        $endpoint = '/users/' . $userId . '/portfolios/images?imageId=' . $imageId;
+        $headerOptions = $this->buildAuthHeader($authToken);
+        $params = [ ];
+
+        return $this->sendRequest($endpoint, $params, 'DELETE', $headerOptions);
+    }
+
+    /**
      * Puts the authToken in a header array and
      * returns the header array.
      *
@@ -346,7 +362,8 @@ class ApiService
             $response = $this->convertToAssociativeArray(
                     $ex->getResponse()
                         ->getBody());
-            Log::info('CATCH1: ' . $ex->getResponse()->getBody());
+            // Log::info('CATCH1: ' . $ex->getResponse()->getBody());
+            // Log::info('CATCH2: ' . $ex->getRequest()->getUri());
             if ($ex->getResponse()->getStatusCode() == 401) {
                 if ($response ['code'] == 101) {
                     throw new AuthenticationException();

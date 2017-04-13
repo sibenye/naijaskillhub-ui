@@ -63,15 +63,33 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 44);
+/******/ 	return __webpack_require__(__webpack_require__.s = 51);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 44:
+/***/ 14:
+/***/ (function(module, exports) {
+
+/**
+* Below are Polyfill functions for Browser backward compatibility
+*/
+
+if (!Object.keys) Object.keys = function (o) {
+  if (o !== Object(o)) throw new TypeError('Object.keys called on a non-object');
+  var k = [],
+      p;
+  for (p in o) {
+    if (Object.prototype.hasOwnProperty.call(o, p)) k.push(p);
+  }return k;
+};
+
+/***/ }),
+
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
-(function webpackMissingModule() { throw new Error("Cannot find module \"/Users/silver.ibenye/Dev/git/naijaskillhub-ui/resources/assets/js/nsh-funtions.js\""); }());
+module.exports = __webpack_require__(14);
 
 
 /***/ })
