@@ -33,7 +33,13 @@
         "HTTPCLIENT_CONNECTION_TIMEOUT": {
             "required": true
         },
-        "IMAGE_LOCATION_URL": {
+        "STATIC_FILES_LOCATION_URL": {
+            "required": true
+        },
+        "DROPBOX_APP_TOKEN": {
+            "required": true
+        },
+        "DROPBOX_APP_SECRET": {
             "required": true
         }
 	},

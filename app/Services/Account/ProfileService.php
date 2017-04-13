@@ -79,7 +79,7 @@ class ProfileService
             return $response;
         }
 
-        $fileSource = env('STATIC_FILES_LOCATION_URL') . $response ['filePath'];
+        $fileSource = $this->dropboxClient->getFileSource($response ['filePath']);
 
         return [
                 'fileSrc' => $fileSource
