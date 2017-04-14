@@ -238,6 +238,18 @@ class ApiService
 
     /**
      *
+     * @param int $userId
+     * @return array
+     */
+    public function getUserAudioPortfolio($userId)
+    {
+        $endpoint = 'users/' . $userId . '/portfolios/audios';
+
+        return $this->sendRequest($endpoint, [ ], 'GET');
+    }
+
+    /**
+     *
      * @param string $image
      * @param string $contentType
      * @param string $authToken
@@ -252,6 +264,36 @@ class ApiService
                 [
                         'name' => 'file',
                         'contents' => $image
+                ],
+                [
+                        'name' => 'uploadContentType',
+                        'contents' => $contentType
+                ],
+                [
+                        'name' => 'caption',
+                        'contents' => $caption
+                ]
+        ];
+
+        return $this->sendRequest($endpoint, $params, 'POST', $headerOptions, false, true);
+    }
+
+    /**
+     *
+     * @param string $audio
+     * @param string $contentType
+     * @param string $authToken
+     * @param string $location
+     */
+    public function uploadUserPortfolioAudio($audio, $contentType, $authToken, $caption)
+    {
+        $endpoint = 'upload/portfolio/audio';
+        $headerOptions = $this->buildAuthHeader($authToken);
+
+        $params = [
+                [
+                        'name' => 'file',
+                        'contents' => $audio
                 ],
                 [
                         'name' => 'uploadContentType',
@@ -286,6 +328,25 @@ class ApiService
     }
 
     /**
+     *
+     * @param int $userId
+     * @param string $authToken
+     * @param string $caption
+     * @param string $imageType
+     * @param int $audioId
+     */
+    public function savePortfolioAudioMetaData($userId, $authToken, $caption, $audioId)
+    {
+        $endpoint = '/users/' . $userId . '/portfolios/audios';
+        $headerOptions = $this->buildAuthHeader($authToken);
+        $params = [ ];
+        $params ['caption'] = $caption;
+        $params ['audioId'] = $audioId;
+
+        return $this->sendRequest($endpoint, $params, 'POST', $headerOptions, true);
+    }
+
+    /**
      * Delete a user's portfolio image.
      *
      * @param int $imageId
@@ -295,6 +356,22 @@ class ApiService
     public function deleteUserPortfolioImage($imageId, $userId, $authToken)
     {
         $endpoint = '/users/' . $userId . '/portfolios/images?imageId=' . $imageId;
+        $headerOptions = $this->buildAuthHeader($authToken);
+        $params = [ ];
+
+        return $this->sendRequest($endpoint, $params, 'DELETE', $headerOptions);
+    }
+
+    /**
+     * Delete a user's portfolio audio.
+     *
+     * @param int $audioId
+     * @param int $userId
+     * @param string $authToken
+     */
+    public function deleteUserPortfolioAudio($audioId, $userId, $authToken)
+    {
+        $endpoint = '/users/' . $userId . '/portfolios/audios?audioId=' . $audioId;
         $headerOptions = $this->buildAuthHeader($authToken);
         $params = [ ];
 
@@ -362,7 +439,7 @@ class ApiService
             $response = $this->convertToAssociativeArray(
                     $ex->getResponse()
                         ->getBody());
-            // Log::info('CATCH1: ' . $ex->getResponse()->getBody());
+            Log::info('CATCH1: ' . $ex->getResponse()->getBody());
             // Log::info('CATCH2: ' . $ex->getRequest()->getUri());
             if ($ex->getResponse()->getStatusCode() == 401) {
                 if ($response ['code'] == 101) {

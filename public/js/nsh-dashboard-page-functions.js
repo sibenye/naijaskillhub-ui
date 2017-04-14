@@ -78,6 +78,7 @@
 //define variables
 var httpRequest;
 var imageIdForDelete = null;
+var audioIdForDelete = null;
 
 /* define event listeners */
 
@@ -93,12 +94,52 @@ if (document.getElementById("portfolioImageUploadSelection") != undefined) {
 
 /* define event listeners - end */
 
+/* edit portfolio audio */
+editPortfolioAudio = function editPortfolioAudio(audioId) {
+	//just go to the edit page
+	window.location.href = window.location.protocol + '//' + window.location.hostname + "/account/dashboard/portfolio/audio/edit/" + audioId;
+};
+/* edit portfolio audio - end */
+
 /* edit portfolio image */
 editPortfolioImage = function editPortfolioImage(imageId) {
 	//just go to the edit page
 	window.location.href = window.location.protocol + '//' + window.location.hostname + "/account/dashboard/portfolio/image/edit/" + imageId;
 };
 /* edit portfolio image - end */
+
+/* delete portfolio audio */
+deletePortfolioAudio = function deletePortfolioAudio(audioId) {
+	var data = { audioId: audioId };
+	audioIdForDelete = audioId;
+	var endpoint = 'dashboard/portfolio/audio?audioId=' + audioId;
+	//start spinner
+	startGlobalSpinner();
+	makeRequest(endpoint, 'DELETE', null, handlePortfolioAudioDeleteResponse, null);
+};
+
+function handlePortfolioAudioDeleteResponse(status, message) {
+
+	if (status === 'success') {
+		console.log(message);
+		//remove audio block
+		removeAudioBlock(audioIdForDelete);
+	} else {
+		console.error(message);
+	}
+	audioIdForDelete = null;
+	stopGlobalSpinner();
+}
+
+function removeAudioBlock(audioId) {
+	if (audioId !== null) {
+		var audioList = document.getElementById('portfolioAudioList');
+		var audioBlock = document.getElementById('audioBlock-' + audioId);
+		audioList.removeChild(audioBlock);
+	}
+}
+
+/* delete portfolio audio - end */
 
 /* delete portfolio image */
 deletePortfolioImage = function deletePortfolioImage(imageId) {

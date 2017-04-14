@@ -60,6 +60,39 @@ class PortfolioService
         return $portfolioImages;
     }
 
+    public function getUserAudioPortfolio($audioId = NULL)
+    {
+        $userId = Auth::user()->getAuthIdentifier();
+
+        $response = $this->apiService->getUserAudioPortfolio($userId);
+
+        if (array_key_exists('error', $response)) {
+            return $response;
+        }
+
+        $portfolioAudios = $this->mapPortfolioAudioResponse($response ['audios']);
+
+        if (!empty($audioId)) {
+            $found = false;
+            $audioRequested = [ ];
+            foreach ($portfolioAudios as $portfolioAudio) {
+                if ($portfolioAudio ['audioId'] == $audioId) {
+                    $found = true;
+                    $audioRequested [0] = $portfolioAudio;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                abort(404);
+            }
+
+            return $audioRequested;
+        }
+
+        return $portfolioAudios;
+    }
+
     public function getUserPortfolio()
     {
         $userId = Auth::user()->getAuthIdentifier();
@@ -92,7 +125,6 @@ class PortfolioService
         $response = [ ];
 
         $contentType = 'image/' . $image->extension();
-        Log::info('IMAGE EXTENSION: ' . $image->extension());
 
         if (empty($caption)) {
             $caption = empty($image->getClientOriginalName()) ? '' : substr(
@@ -109,6 +141,40 @@ class PortfolioService
         }
 
         $fileSource = $this->dropboxClient->getFileSource($saveImageResponse ['filePath']);
+
+        $response ['fileSrc'] = $fileSource;
+
+        return $response;
+    }
+
+    /**
+     *
+     * @param string $audio
+     * @param string $caption
+     * @param string $contentType
+     * @return string[]|unknown[]|mixed[]
+     */
+    public function saveUserPortfolioAudio(UploadedFile $audio, $caption)
+    {
+        $response = [ ];
+
+        $contentType = 'audio/' . $audio->extension();
+
+        if (empty($caption)) {
+            $caption = empty($audio->getClientOriginalName()) ? '' : substr(
+                    $audio->getClientOriginalName(), 0, 40);
+        }
+
+        $authToken = session('nsh_authToken');
+        // then save the image
+        $audioContent = file_get_contents($audio->getPathname());
+        $saveAudioResponse = $this->apiService->uploadUserPortfolioAudio($audioContent,
+                $contentType, $authToken, $caption);
+        if (array_key_exists('error', $saveAudioResponse)) {
+            return $saveAudioResponse;
+        }
+
+        $fileSource = $this->dropboxClient->getFileSource($saveAudioResponse ['filePath']);
 
         $response ['fileSrc'] = $fileSource;
 
@@ -137,6 +203,31 @@ class PortfolioService
     }
 
     /**
+     *
+     * @param int $audioId
+     * @param string $caption
+     * @return array
+     */
+    public function updateUserPorfolioAudio($audioId, $caption)
+    {
+        $userId = Auth::user()->getAuthIdentifier();
+        $authToken = session('nsh_authToken');
+
+        $metadataResponse = $this->apiService->savePortfolioAudioMetaData($userId, $authToken,
+                $caption, $audioId);
+
+        if (array_key_exists('error', $metadataResponse)) {
+            return $metadataResponse;
+        }
+
+        $response = [ ];
+        $response ['audioId'] = $metadataResponse ['audioId'];
+        $response ['caption'] = $metadataResponse ['caption'];
+
+        return $response;
+    }
+
+    /**
      * Delete user's portfolio image.
      *
      * @param int $imageId
@@ -147,6 +238,25 @@ class PortfolioService
         $authToken = session('nsh_authToken');
 
         $response = $this->apiService->deleteUserPortfolioImage($imageId, $userId, $authToken);
+
+        if ($response == null) {
+            $response = [ ];
+        }
+
+        return $response;
+    }
+
+    /**
+     * Delete user's portfolio audio.
+     *
+     * @param int $audioId
+     */
+    public function deleteUserPortfolioAudio($audioId)
+    {
+        $userId = Auth::user()->getAuthIdentifier();
+        $authToken = session('nsh_authToken');
+
+        $response = $this->apiService->deleteUserPortfolioAudio($audioId, $userId, $authToken);
 
         if ($response == null) {
             $response = [ ];
@@ -190,7 +300,7 @@ class PortfolioService
             $videosResponse [$key] ['videoUrl'] = $value ['videoUrl'];
         }
 
-        $videosResponse;
+        return $videosResponse;
     }
 
     private function mapPortfolioAudioResponse($audios)
@@ -204,7 +314,7 @@ class PortfolioService
                     $value ['filePath']);
         }
 
-        $audiosResponse;
+        return $audiosResponse;
     }
 
     private function mapPortfolioCreditResponse($credits)
@@ -219,6 +329,6 @@ class PortfolioService
             $creditsResponse [$key] ['year'] = $value ['year'];
         }
 
-        $creditsResponse;
+        return $creditsResponse;
     }
 }
