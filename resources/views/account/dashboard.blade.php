@@ -22,6 +22,7 @@
   <div class="nsh-dashboard-content col-md-8 col-md-offset-4">
       @include('account.components.profile_section')
       @include('account.components.portfolio_image_section')
+      @include('account.components.portfolio_audio_section')
     </div>
 
 </div>

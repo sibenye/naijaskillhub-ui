@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PortfolioImageAddRequest;
 use App\Http\Requests\PortfolioImageEditRequest;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\PortfolioAudioAddRequest;
+use App\Http\Requests\PortfolioAudioEditRequest;
 
 class DashboardController extends Controller
 {
@@ -46,12 +48,10 @@ class DashboardController extends Controller
         $this->middleware('auth');
         $this->middleware('ajax',
                 [
-                        'except' => [
-                                'show',
-                                'addPortfolioImage',
-                                'editPortfolioImage',
-                                'savePortfolioImage',
-                                'updatePortfolioImage'
+                        'only' => [
+                                'saveProfile',
+                                'saveProfileImage',
+                                'deletePortfolioImage'
                         ]
                 ]);
     }
@@ -90,6 +90,18 @@ class DashboardController extends Controller
     }
 
     /**
+     * Show new portfolio audio page.
+     *
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function addPortfolioAudio()
+    {
+        return view('account.portfolio_audio_add', [
+                'viewBag' => [ ]
+        ]);
+    }
+
+    /**
      * Show edit portfolio image page.
      *
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
@@ -100,6 +112,20 @@ class DashboardController extends Controller
         return view('account.portfolio_image_edit',
                 [
                         'viewBag' => $portfolioImage [0]
+                ]);
+    }
+
+    /**
+     * Show edit portfolio audio page.
+     *
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function editPortfolioAudio($audioId)
+    {
+        $portfolioAudio = $this->portfolioService->getUserAudioPortfolio($audioId);
+        return view('account.portfolio_audio_edit',
+                [
+                        'viewBag' => $portfolioAudio [0]
                 ]);
     }
 
@@ -153,6 +179,32 @@ class DashboardController extends Controller
     }
 
     /**
+     * Save portfolio audio.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function savePortfolioAudio(PortfolioAudioAddRequest $request)
+    {
+        $audio = $request->file('audio', NULL);
+        $caption = $request->input('caption');
+
+        $file = $audio->getClientOriginalName();
+        $mime = $audio->getMimeType();
+        $ext = $audio->getExtension();
+
+        $response = $this->portfolioService->saveUserPortfolioAudio($audio, $caption);
+
+        if (array_key_exists('error', $response)) {
+
+            $request->session()->flash('requestError', $response ['error']);
+            return back()->withInput();
+        }
+
+        return redirect()->route('account');
+    }
+
+    /**
      * Update Portfolio image.
      *
      * @param PortfolioImageEditRequest $request
@@ -167,6 +219,29 @@ class DashboardController extends Controller
 
         if (array_key_exists('error', $response)) {
 
+            $request->session()->flash('requestError', $response ['error']);
+            return back()->withInput();
+        }
+
+        return redirect()->route('account');
+    }
+
+    /**
+     * Update Portfolio image.
+     *
+     * @param PortfolioImageEditRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function updatePortfolioAudio(PortfolioAudioEditRequest $request)
+    {
+        $audioId = $request->input('audioId');
+        $caption = $request->input('caption');
+
+        $response = $this->portfolioService->updateUserPorfolioAudio($audioId, $caption);
+
+        if (array_key_exists('error', $response)) {
+
+            $request->session()->flash('requestError', $response ['error']);
             return back()->withInput();
         }
 
@@ -181,9 +256,22 @@ class DashboardController extends Controller
     public function deletePortfolioImage(Request $request)
     {
         $imageId = $request->get('imageId');
-        Log::info('IMAGEID: ' . $imageId);
 
         $response = $this->portfolioService->deleteUserPortfolioImage($imageId);
+
+        return $response;
+    }
+
+    /**
+     * Delete user's portfolio audio.
+     *
+     * @param Request $request
+     */
+    public function deletePortfolioAudio(Request $request)
+    {
+        $audioId = $request->get('audioId');
+
+        $response = $this->portfolioService->deleteUserPortfolioAudio($audioId);
 
         return $response;
     }
