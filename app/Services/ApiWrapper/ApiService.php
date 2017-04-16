@@ -1,15 +1,22 @@
 <?php
 namespace App\Services\ApiWrapper;
 
-use App\Utilities\HttpClient;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Exception\RequestException;
-use Illuminate\Auth\AuthenticationException;
+use App\Mappers\ApiResponseMappers\LoginResponseMapper;
+use App\Mappers\ApiResponseMappers\RegisterResponseMapper;
+use App\Mappers\ApiResponseMappers\UserResponseMapper;
 use App\Models\User;
+use App\Utilities\HttpClient;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Psr7\Response;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
+use App\Mappers\ApiResponseMappers\AttributesResponseMapper;
+use App\Mappers\ApiResponseMappers\PortfoliosResponseMapper;
+use App\Mappers\ApiResponseMappers\PortfolioImagesResponseMapper;
+use App\Mappers\ApiResponseMappers\PortfolioAudiosResponseMapper;
 
 class ApiService
 {
@@ -44,12 +51,13 @@ class ApiService
      */
     public function authenticateUserCredentials($username, $password)
     {
-        $userResponse = $this->standardLogin($username, $password);
+        $loginResponse = $this->standardLogin($username, $password);
 
-        if (array_key_exists('error', $userResponse)) {
+        if (array_key_exists('error', $loginResponse)) {
             return false;
         } else {
-            return $userResponse;
+            $loginResponseMapper = new LoginResponseMapper();
+            return $loginResponseMapper->map($loginResponse);
         }
     }
 
@@ -90,7 +98,14 @@ class ApiService
         $params ['lastName'] = $lastName;
         $params ['accountType'] = $accountType;
 
-        return $this->sendRequest('register', $params, 'POST', [ ], true);
+        $response = $this->sendRequest('register', $params, 'POST', [ ], true);
+
+        if ($response && !array_key_exists('error', $response)) {
+            $registerMapper = new RegisterResponseMapper();
+            return $registerMapper->map($response);
+        }
+
+        return $response;
     }
 
     /**
@@ -104,8 +119,7 @@ class ApiService
         $userModel = NULL;
 
         if (!array_key_exists('error', $userResponse)) {
-            $userAttributes = $this->mapAttributes($userResponse);
-            $userModel = new User($userAttributes);
+            $userModel = new User($userResponse);
         }
 
         return $userModel;
@@ -122,8 +136,7 @@ class ApiService
         $userModel = NULL;
 
         if (!array_key_exists('error', $userResponse)) {
-            $userAttributes = $this->mapAttributes($userResponse);
-            $userModel = new User($userAttributes);
+            $userModel = new User($userResponse);
         }
 
         return $userModel;
@@ -136,7 +149,14 @@ class ApiService
      */
     public function getUserByEmailAddress($email)
     {
-        return $this->sendRequest('users/byEmail/' . $email, [ ], 'GET');
+        $response = $this->sendRequest('users/byEmail/' . $email, [ ], 'GET');
+
+        if (!array_key_exists('error', $response)) {
+            $mappedResponse = $this->mapUserResponse($response);
+            return $mappedResponse;
+        }
+
+        return $response;
     }
 
     /**
@@ -146,7 +166,14 @@ class ApiService
      */
     public function getUserById($id)
     {
-        return $this->sendRequest('users/' . $id, [ ], 'GET');
+        $response = $this->sendRequest('users/' . $id, [ ], 'GET');
+
+        if (!array_key_exists('error', $response)) {
+            $mappedResponse = $this->mapUserResponse($response);
+            return $mappedResponse;
+        }
+
+        return $response;
     }
 
     /**
@@ -169,7 +196,16 @@ class ApiService
         if (count($attributeNames) > 0) {
             $params ['attributeNames'] = implode(',', $attributeNames);
         }
-        return $this->sendRequest($endpoint, $params, 'GET', $this->buildAuthHeader($authToken));
+        $response = $this->sendRequest($endpoint, $params, 'GET',
+                $this->buildAuthHeader($authToken));
+
+        if (!array_key_exists('error', $response)) {
+            $attributesMapper = new AttributesResponseMapper();
+            $mappedResponse = $attributesMapper->map($response ['attributes']);
+            return $mappedResponse;
+        }
+
+        return $response;
     }
 
     /**
@@ -221,7 +257,15 @@ class ApiService
     {
         $endpoint = 'users/' . $userId . '/portfolios';
 
-        return $this->sendRequest($endpoint, [ ], 'GET');
+        $response = $this->sendRequest($endpoint, [ ], 'GET');
+
+        if (!array_key_exists('error', $response)) {
+            $portfoliosMapper = new PortfoliosResponseMapper();
+            $mappedResponse = $portfoliosMapper->map($response);
+            return $mappedResponse;
+        }
+
+        return $response;
     }
 
     /**
@@ -233,7 +277,15 @@ class ApiService
     {
         $endpoint = 'users/' . $userId . '/portfolios/images';
 
-        return $this->sendRequest($endpoint, [ ], 'GET');
+        $response = $this->sendRequest($endpoint, [ ], 'GET');
+
+        if (!array_key_exists('error', $response)) {
+            $portfoliosMapper = new PortfolioImagesResponseMapper();
+            $mappedResponse = $portfoliosMapper->map($response ['images']);
+            return $mappedResponse;
+        }
+
+        return $response;
     }
 
     /**
@@ -245,7 +297,15 @@ class ApiService
     {
         $endpoint = 'users/' . $userId . '/portfolios/audios';
 
-        return $this->sendRequest($endpoint, [ ], 'GET');
+        $response = $this->sendRequest($endpoint, [ ], 'GET');
+
+        if (!array_key_exists('error', $response)) {
+            $portfoliosMapper = new PortfolioAudiosResponseMapper();
+            $mappedResponse = $portfoliosMapper->map($response ['audios']);
+            return $mappedResponse;
+        }
+
+        return $response;
     }
 
     /**
@@ -398,17 +458,10 @@ class ApiService
      * @param array $userResponse
      * @return array
      */
-    private function mapAttributes($userResponse)
+    private function mapUserResponse($userResponse)
     {
-        $userAttributes = [ ];
-        $userAttributes ['id'] = $userResponse ['userId'];
-        $userAttributes ['isActive'] = $userResponse ['isActive'];
-        $userAttributes ['email'] = $userResponse ['emailAddress'];
-        $userAttributes ['credentialTypes'] = $userResponse ['credentialTypes'];
-        $userAttributes ['accountTypes'] = $userResponse ['accountTypes'];
-        $userAttributes ['categories'] = $userResponse ['categories'];
-
-        return $userAttributes;
+        $userMapper = new UserResponseMapper();
+        return $userMapper->map($userResponse);
     }
 
     /**
@@ -430,6 +483,7 @@ class ApiService
         $responseArray = [ ];
 
         try {
+            Log::info('REQUEST: ' . $endpoint);
             $response = $this->httpClient->makeRequest($endpoint, $params, $method, $clientOptions,
                     $isJsonData, $isMultipart);
 

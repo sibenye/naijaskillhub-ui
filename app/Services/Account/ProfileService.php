@@ -38,7 +38,7 @@ class ProfileService
             return $response;
         }
 
-        $attributes = $response ['attributes'];
+        $attributes = $response;
 
         $profileAttributes = [ ];
 
