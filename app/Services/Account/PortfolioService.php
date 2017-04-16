@@ -37,7 +37,7 @@ class PortfolioService
             return $response;
         }
 
-        $portfolioImages = $this->mapPortfolioImageResponse($response ['images']);
+        $portfolioImages = $this->mapPortfolioImageResponse($response);
 
         if (!empty($imageId)) {
             $found = false;
@@ -70,7 +70,7 @@ class PortfolioService
             return $response;
         }
 
-        $portfolioAudios = $this->mapPortfolioAudioResponse($response ['audios']);
+        $portfolioAudios = $this->mapPortfolioAudioResponse($response);
 
         if (!empty($audioId)) {
             $found = false;

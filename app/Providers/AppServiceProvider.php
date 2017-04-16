@@ -7,6 +7,7 @@ use App\Services\ApiWrapper\ApiService;
 use App\Services\Account\ProfileService;
 use App\Services\StatesService;
 use App\Utilities\DropboxClientWrapper;
+use App\Mappers\UserMapper;
 
 class AppServiceProvider extends ServiceProvider
 {
