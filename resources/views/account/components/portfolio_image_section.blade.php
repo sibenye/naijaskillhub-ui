@@ -5,11 +5,11 @@
         </div>
         <div class="nsh-card-content">
             <div id="portfolioImageList" class="nsh-portfolioImage-edit-list">
-           @if (empty($viewBag['portfolio']['images']))
+           @if (empty($viewBag['images']))
                 <p id="emptyPortfolioImageList">You have no portfolio images, click the <b style="font-size: 24px;">+</b> button below to add images.</p>
             @else
-                
-                    @foreach ($viewBag['portfolio']['images'] as $image)
+
+                    @foreach ($viewBag['images'] as $image)
                         <div id="imageBlock-{{ $image['imageId'] }}">
                             <a id="figure-{{ $image['imageId'] }}">
                                 <figure>
@@ -18,7 +18,7 @@
                                 </figure>
                             </a>
                             <input id="imageId-{{ $image['imageId'] }}" type="hidden" value="{{ $image['imageId'] }}">
-                            
+
                             <div id="imageBlockFooter">
                             <span id="deleteImageBtn-{{ $image['imageId'] }}" class="nsh-left" onclick="deletePortfolioImage({{ $image['imageId'] }})"><i class="material-icons">&#xE92B;</i></span>
                             <span class="nsh-right" onclick="editPortfolioImage({{ $image['imageId'] }})"><i class="material-icons">&#xE3C9;</i></span>
@@ -27,7 +27,7 @@
                     @endforeach
             @endif
             </div>
-            
+
         </div>
 
         <div class="mdl-card__actions mdl-card--border">

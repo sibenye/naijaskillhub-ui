@@ -97,14 +97,14 @@ if (document.getElementById("portfolioImageUploadSelection") != undefined) {
 /* edit portfolio audio */
 editPortfolioAudio = function editPortfolioAudio(audioId) {
 	//just go to the edit page
-	window.location.href = window.location.protocol + '//' + window.location.hostname + "/account/dashboard/portfolio/audio/edit/" + audioId;
+	goTo("/account/portfolio/audio/edit/" + audioId);
 };
 /* edit portfolio audio - end */
 
 /* edit portfolio image */
 editPortfolioImage = function editPortfolioImage(imageId) {
 	//just go to the edit page
-	window.location.href = window.location.protocol + '//' + window.location.hostname + "/account/dashboard/portfolio/image/edit/" + imageId;
+	goTo("/account/portfolio/image/edit/" + imageId);
 };
 /* edit portfolio image - end */
 
@@ -112,7 +112,7 @@ editPortfolioImage = function editPortfolioImage(imageId) {
 deletePortfolioAudio = function deletePortfolioAudio(audioId) {
 	var data = { audioId: audioId };
 	audioIdForDelete = audioId;
-	var endpoint = 'dashboard/portfolio/audio?audioId=' + audioId;
+	var endpoint = '/account/portfolio/audio?audioId=' + audioId;
 	//start spinner
 	startGlobalSpinner();
 	makeRequest(endpoint, 'DELETE', null, handlePortfolioAudioDeleteResponse, null);
@@ -145,7 +145,7 @@ function removeAudioBlock(audioId) {
 deletePortfolioImage = function deletePortfolioImage(imageId) {
 	var data = { imageId: imageId };
 	imageIdForDelete = imageId;
-	var endpoint = 'dashboard/portfolio/image?imageId=' + imageId;
+	var endpoint = 'portfolio/image?imageId=' + imageId;
 	//start spinner
 	startGlobalSpinner();
 	makeRequest(endpoint, 'DELETE', null, handlePortfolioImageDeleteResponse, null);
@@ -202,7 +202,7 @@ function uploadProfileImage() {
 	var contentType = selectedFile.type;
 	//TODO: validate contentType
 	document.getElementById("mdl-spinner-profile-image").classList.add('is-active');
-	makeRequest('dashboard/profile/image/upload', 'POST', selectedFile, handleProfileImageUploadResponse, 'mdl-spinner-profile-image', contentType);
+	makeRequest('/account/profile/image/upload', 'POST', selectedFile, handleProfileImageUploadResponse, 'mdl-spinner-profile-image', contentType);
 }
 
 function handleProfileImageUploadResponse(status, message) {
@@ -257,7 +257,7 @@ function saveUserProfile() {
 	console.log(formData);
 
 	document.getElementById("mdl-spinner-profile").classList.add('is-active');
-	makeRequest('dashboard/profile/edit', 'POST', JSON.stringify(formData), handleProfileSaveResponse, 'mdl-spinner-profile');
+	makeRequest('/account/profile/edit', 'POST', JSON.stringify(formData), handleProfileSaveResponse, 'mdl-spinner-profile');
 }
 
 /**

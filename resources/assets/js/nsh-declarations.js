@@ -11,3 +11,6 @@ var editPortfolioImage;
 var editPortfolioAudio;
 var deletePortfolioAudio;
 var deletePortfolioImage;
+var buildUrl;
+var goTo;
+var redirectTo;

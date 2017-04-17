@@ -459,6 +459,10 @@ figcaption {
     margin-bottom: 30px;
 }
 
+.nsh-dashboard-card-content p {
+	font-size: 20px
+}
+
 .nsh-card-content {
     align-items: center;
     text-align: center;

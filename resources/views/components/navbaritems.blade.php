@@ -17,7 +17,7 @@
         <i class="material-icons">&#xE853;</i>
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-        <li class="nsh-user-dropdown-menu-item"><a href="{{ route('account') }}">My Account</a></li>
+        <li class="nsh-user-dropdown-menu-item"><a href="{{ route('dashboard') }}">My Account</a></li>
         <li class="nsh-user-dropdown-menu-item"><a href="{{ route('logout') }}"
                         onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                         Logout </a>

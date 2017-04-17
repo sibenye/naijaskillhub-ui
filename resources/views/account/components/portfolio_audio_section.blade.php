@@ -5,10 +5,10 @@
         </div>
         <div class="nsh-card-content">
             <div id="portfolioAudioList" class="nsh-portfolioAudio-edit-list">
-           @if (empty($viewBag['portfolio']['audios']))
+           @if (empty($viewBag['audios']))
                 <p id="emptyPortfolioAudioList">You have no portfolio audios, click the <b style="font-size: 24px;">+</b> button below to add audio clips.</p>
             @else
-                    @foreach ($viewBag['portfolio']['audios'] as $audio)
+                    @foreach ($viewBag['audios'] as $audio)
                         <div id="audioBlock-{{ $audio['audioId'] }}" class="row mdl-card__actions mdl-card--border">
                             <div class="col-md-5 col-xs-12">
                                 <audio id="audio-{{ $audio['audioId'] }}" src="{{ $audio['fileSrc'] }}" controls></audio>
@@ -21,11 +21,11 @@
                                     <div class="col-xs-6"><span onclick="editPortfolioAudio({{ $audio['audioId'] }})"><i class="material-icons">&#xE3C9;</i></span></div>
                             </div>
                         </div>
-                        
+
                     @endforeach
             @endif
             </div>
-            
+
         </div>
 
         <div class="mdl-card__actions mdl-card--border">

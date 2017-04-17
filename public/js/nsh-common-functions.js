@@ -98,7 +98,7 @@ stopGlobalSpinner = function stopGlobalSpinner() {
  * @param spinnerId
  * @returns
  */
-makeRequest = function makeRequest(url, method, data) {
+makeRequest = function makeRequest(endpoint, method, data) {
     var customResponseHandler = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
     var spinnerId = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
     var contentType = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 'application/json';
@@ -122,7 +122,7 @@ makeRequest = function makeRequest(url, method, data) {
                 console.log(response.status);
             } else if (httpRequest.status === 401) {
                 //redirect to login page
-                window.location.replace(window.location.protocol + '//' + window.location.hostname + "/login");
+                redirectTo("/login");
             } else {
                 console.log(httpRequest.responseText);
                 response = JSON.parse(httpRequest.responseText);
@@ -137,7 +137,7 @@ makeRequest = function makeRequest(url, method, data) {
         }
     };
 
-    httpRequest.open(method, url);
+    httpRequest.open(method, buildUrl(endpoint));
     httpRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     httpRequest.setRequestHeader('X-CSRF-TOKEN', window.Laravel.csrfToken);
     if (headers !== null) {
@@ -177,6 +177,20 @@ unfade = function unfade(element, interval) {
         element.style.filter = 'alpha(opacity=' + op * 100 + ")";
         op += op * 0.1;
     }, interval);
+};
+
+buildUrl = function buildUrl(endpoint) {
+    var url = window.location.protocol + '//' + window.location.hostname + endpoint;
+
+    return url;
+};
+
+goTo = function goTo(relativeUrl) {
+    window.location.href = window.location.protocol + '//' + window.location.hostname + relativeUrl;
+};
+
+redirectTo = function redirectTo(relativeUrl) {
+    window.location.replace(window.location.protocol + '//' + window.location.hostname + relativeUrl);
 };
 
 /***/ }),

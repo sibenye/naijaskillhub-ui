@@ -25,7 +25,7 @@ stopGlobalSpinner = function () {
  * @param spinnerId
  * @returns
  */
-makeRequest = function (url, method, data, customResponseHandler = null, spinnerId = null, contentType = 'application/json', headers = null) {
+makeRequest = function (endpoint, method, data, customResponseHandler = null, spinnerId = null, contentType = 'application/json', headers = null) {
     httpRequest = new XMLHttpRequest();
 
     if (!httpRequest) {
@@ -44,7 +44,7 @@ makeRequest = function (url, method, data, customResponseHandler = null, spinner
     	    	  console.log(response.status);
     	      } else if (httpRequest.status === 401) {
     	    	  //redirect to login page
-    	    	  window.location.replace(window.location.protocol +'//' + window.location.hostname +"/login");
+    	    	  redirectTo("/login");
     	      } else {
     	    	  console.log(httpRequest.responseText);
     	    	  response = JSON.parse(httpRequest.responseText);
@@ -60,7 +60,7 @@ makeRequest = function (url, method, data, customResponseHandler = null, spinner
     	    }
     };
     
-    httpRequest.open(method, url);
+    httpRequest.open(method, buildUrl(endpoint));
     httpRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     httpRequest.setRequestHeader('X-CSRF-TOKEN', window.Laravel.csrfToken);
     if (headers !== null) {
@@ -100,5 +100,19 @@ unfade = function (element, interval) {
         element.style.filter = 'alpha(opacity=' + op * 100 + ")";
         op += op * 0.1;
     }, interval);
+}
+
+buildUrl = function (endpoint) {
+	var url = window.location.protocol +'//' + window.location.hostname + endpoint;
+	
+	return url;
+}
+
+goTo = function (relativeUrl) {
+	window.location.href = window.location.protocol +'//' + window.location.hostname + relativeUrl;
+}
+
+redirectTo = function (relativeUrl) {
+	window.location.replace(window.location.protocol +'//' + window.location.hostname + relativeUrl);
 }
 

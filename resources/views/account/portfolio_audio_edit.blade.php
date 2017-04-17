@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Portfolio Audio')
+@section('title', 'My Account - Edit Portfolio Audio')
 
 @section('content')
 <div class="container">
@@ -35,13 +35,13 @@
                     <div class="row">
                         <div class="form-group">
                             <div class="col-md-6">
-                                <a href="{{ route('account') }}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect nsh-left">
+                                <a href="{{ route('edit-portfolio-audios') }}" class="mdl-button mdl-button--accent mdl-js-button mdl-js-ripple-effect nsh-left">
                                   Cancel
                                 </a>
                             </div>
 
                             <div class="col-md-6">
-                                <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect nsh-right">
+                                <button type="submit" class="mdl-button mdl-button--accent mdl-js-button mdl-js-ripple-effect nsh-right">
                                     Save
                                 </button>
                             </div>
