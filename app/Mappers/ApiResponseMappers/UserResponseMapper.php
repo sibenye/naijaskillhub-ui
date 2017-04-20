@@ -14,11 +14,12 @@ class UserResponseMapper implements IMapper
     {
         $out = [
                 'id' => array_get($in, 'userId', NULL),
-                'isActive' => array_get($in, 'isActive', NULL),
-                'email' => array_get($in, 'email', NULL),
-                'credentialTypes' => array_get($in, 'credentialTypes', NULL),
-                'accountTypes' => array_get($in, 'accountTypes', NULL),
-                'categories' => array_get($in, 'categories', NULL)
+                'isActive' => array_get($in, 'isActive', false),
+                'email' => array_get($in, 'emailAddress', NULL),
+                'credentialTypes' => array_get($in, 'credentialTypes', [ ]),
+                'accountTypes' => array_get($in, 'accountTypes', [ ]),
+                'categories' => array_get($in, 'categories', [ ]),
+                'portfolio' => array_get($in, 'portfolio', [ ])
         ];
 
         return $out;

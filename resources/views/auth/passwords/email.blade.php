@@ -35,13 +35,13 @@
                         <div class="row">
                         <div class="form-group">
                             <div class="col-md-6">
-                                <a href="{{ url('/home') }}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect nsh-left">
+                                <a href="{{ url('/home') }}" class="mdl-button mdl-button--accent mdl-js-button mdl-js-ripple-effect nsh-left">
                                   Cancel
                                 </a>
                             </div>
 
                             <div class="col-md-6">
-                                <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect nsh-right">
+                                <button type="submit" class="mdl-button mdl-button--accent mdl-js-button mdl-js-ripple-effect nsh-right">
                                     Send Password Reset Link
                                 </button>
                             </div>

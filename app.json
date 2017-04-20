@@ -41,6 +41,15 @@
         },
         "DROPBOX_APP_SECRET": {
             "required": true
+        },
+        "DEFAULT_VIDEO_SCREEN": {
+            "required": true
+        },
+        "YOUTUBE_API_KEY": {
+            "required": true
+        },
+        "YOUTUBE_API_BASE_URL": {
+            "required": true
         }
 	},
 	"formation": {

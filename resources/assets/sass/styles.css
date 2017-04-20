@@ -391,8 +391,8 @@ figure {
   overflow: hidden;
 }
 
-figcaption {
-  margin-top: 15px;
+#portfolioImageList figcaption {
+  margin-top: 10px;
 }
 
 #portfolioImageList a figure > figcaption {
@@ -401,12 +401,72 @@ figcaption {
     text-align: left;
 }
 
+#portfolioImageList a:hover {
+    cursor: pointer;
+}
+
+#imageBlockFooter > span {
+    cursor: pointer;
+}
+
 /* Portfolio Image Section - End */
 
 /* Portfolio Audio Section */
+#audioBlockFooter span {
+    cursor: pointer;
+}
 
+#portfolioAudioList figcaption {
+    text-align: center;
+}
 
 /* Portfolio Audio Section - End */
+
+/* Portfolio Video Section */
+.nsh-portfolioVideo-edit-list > div {
+  font-size: 16px;
+  overflow: hidden;
+  display: inline-block;
+  margin-bottom: 8px;
+  width: calc(50% - 4px);
+  margin-right: 8px;
+  vertical-align:top
+}
+
+.nsh-portfolioVideo-edit-list > div:nth-of-type(2n) {
+  margin-right: 0;
+}
+
+@media screen and (min-width: 50em) {
+  .nsh-portfolioVideo-edit-list > div {
+    width: calc(25% - 6px);
+  }
+  
+  .nsh-portfolioVideo-edit-list > div:nth-of-type(2n) {
+    margin-right: 8px;
+  }
+  
+  .nsh-portfolioVideo-edit-list > div:nth-of-type(4n) {
+    margin-right: 0;
+  }
+}
+
+#videoBlockFooter span {
+    cursor: pointer;
+}
+
+#portfolioVideoList a:hover {
+    cursor: pointer;
+}
+
+#portfolioVideoList a figure > figcaption {
+    text-decoration:none;
+    font-size: 70%;
+    text-align: left;
+    margin-top: 10px;
+}
+
+/* Portfolio Video Section - End */
 
 /* Global Spinner */
 .global-spinner {
@@ -416,10 +476,6 @@ figcaption {
     opacity: 0.7;
     position: fixed;
     margin: auto 0;
-}
-
-#imageBlockFooter > span {
-    cursor: pointer;
 }
 
 #mdl-spinner-global.mdl-spinner {
@@ -459,10 +515,20 @@ figcaption {
     margin-bottom: 30px;
 }
 
+.nsh-dashboard-card-content p {
+	font-size: 20px
+}
+
 .nsh-card-content {
     align-items: center;
     text-align: center;
     padding: 10px 20px 0 20px;
+}
+
+.nsh-small-card-content {
+    align-items: center;
+    padding: 5px 10px 0 10px;
+    font-size: 70%;
 }
 
 .nsh-card-content .mdl-checkbox {

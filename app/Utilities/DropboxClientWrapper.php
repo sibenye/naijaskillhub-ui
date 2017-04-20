@@ -16,6 +16,10 @@ class DropboxClientWrapper extends Client
 
     public function getFileSource($filePath)
     {
+        if (starts_with($filePath, 'http')) {
+            return $filePath;
+        }
+
         if (!starts_with($filePath, '/')) {
             $filePath = '/' . $filePath;
         }

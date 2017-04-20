@@ -49,6 +49,13 @@ class User extends Authenticatable
     private $accountTypes;
 
     /**
+     * User's portfolio summary.
+     *
+     * @var array
+     */
+    private $portfolio;
+
+    /**
      * List of user's portfolio categories.
      *
      * @var array
@@ -135,6 +142,17 @@ class User extends Authenticatable
     public function setAccountTypesAttribute(array $accountTypes)
     {
         $this->accountTypes = $accountTypes;
+        return $this;
+    }
+
+    public function getPortfolioAttribute()
+    {
+        return $this->portfolio;
+    }
+
+    public function setPortfolioAttribute(array $portfolio)
+    {
+        $this->portfolio = $portfolio;
         return $this;
     }
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Add Portfolio Image')
+@section('title', 'My Account - Add Portfolio Image')
 
 @section('content')
 <div class="container">
@@ -46,13 +46,13 @@
                     <div class="row">
                         <div class="form-group">
                             <div class="col-md-6">
-                                <a href="{{ route('account') }}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect nsh-left">
+                                <a href="{{ route('edit-portfolio-images') }}" class="mdl-button mdl-button--accent mdl-js-button mdl-js-ripple-effect nsh-left">
                                   Cancel
                                 </a>
                             </div>
 
                             <div class="col-md-6">
-                                <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect nsh-right">
+                                <button type="submit" class="mdl-button mdl-button--accent mdl-js-button mdl-js-ripple-effect nsh-right">
                                     Save
                                 </button>
                             </div>

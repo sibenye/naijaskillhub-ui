@@ -79,6 +79,7 @@
 var httpRequest;
 var imageIdForDelete = null;
 var audioIdForDelete = null;
+var videoIdForDelete = null;
 
 /* define event listeners */
 
@@ -94,25 +95,65 @@ if (document.getElementById("portfolioImageUploadSelection") != undefined) {
 
 /* define event listeners - end */
 
+/* edit portfolio video */
+editPortfolioVideo = function editPortfolioVideo(videoId) {
+	//just go to the edit page
+	goTo("/account/portfolio/video/edit/" + videoId);
+};
+/* edit portfolio video - end */
+
 /* edit portfolio audio */
 editPortfolioAudio = function editPortfolioAudio(audioId) {
 	//just go to the edit page
-	window.location.href = window.location.protocol + '//' + window.location.hostname + "/account/dashboard/portfolio/audio/edit/" + audioId;
+	goTo("/account/portfolio/audio/edit/" + audioId);
 };
 /* edit portfolio audio - end */
 
 /* edit portfolio image */
 editPortfolioImage = function editPortfolioImage(imageId) {
 	//just go to the edit page
-	window.location.href = window.location.protocol + '//' + window.location.hostname + "/account/dashboard/portfolio/image/edit/" + imageId;
+	goTo("/account/portfolio/image/edit/" + imageId);
 };
 /* edit portfolio image - end */
+
+/* delete portfolio video */
+deletePortfolioVideo = function deletePortfolioVideo(videoId) {
+	var data = { videoId: videoId };
+	videoIdForDelete = videoId;
+	var endpoint = '/account/portfolio/video?videoId=' + videoId;
+	//start spinner
+	startGlobalSpinner();
+	makeRequest(endpoint, 'DELETE', null, handlePortfolioVideoDeleteResponse, null);
+};
+
+function handlePortfolioVideoDeleteResponse(status, message) {
+
+	if (status === 'success') {
+		console.log(message);
+		//remove video block
+		removeVideoBlock(videoIdForDelete);
+	} else {
+		console.error(message);
+	}
+	audioIdForDelete = null;
+	stopGlobalSpinner();
+}
+
+function removeVideoBlock(videoId) {
+	if (videoId !== null) {
+		var videoList = document.getElementById('portfolioVideoList');
+		var videoBlock = document.getElementById('videoBlock-' + videoId);
+		videoList.removeChild(videoBlock);
+	}
+}
+
+/* delete portfolio video - end */
 
 /* delete portfolio audio */
 deletePortfolioAudio = function deletePortfolioAudio(audioId) {
 	var data = { audioId: audioId };
 	audioIdForDelete = audioId;
-	var endpoint = 'dashboard/portfolio/audio?audioId=' + audioId;
+	var endpoint = '/account/portfolio/audio?audioId=' + audioId;
 	//start spinner
 	startGlobalSpinner();
 	makeRequest(endpoint, 'DELETE', null, handlePortfolioAudioDeleteResponse, null);
@@ -145,7 +186,7 @@ function removeAudioBlock(audioId) {
 deletePortfolioImage = function deletePortfolioImage(imageId) {
 	var data = { imageId: imageId };
 	imageIdForDelete = imageId;
-	var endpoint = 'dashboard/portfolio/image?imageId=' + imageId;
+	var endpoint = 'portfolio/image?imageId=' + imageId;
 	//start spinner
 	startGlobalSpinner();
 	makeRequest(endpoint, 'DELETE', null, handlePortfolioImageDeleteResponse, null);
@@ -202,7 +243,7 @@ function uploadProfileImage() {
 	var contentType = selectedFile.type;
 	//TODO: validate contentType
 	document.getElementById("mdl-spinner-profile-image").classList.add('is-active');
-	makeRequest('dashboard/profile/image/upload', 'POST', selectedFile, handleProfileImageUploadResponse, 'mdl-spinner-profile-image', contentType);
+	makeRequest('/account/profile/image/upload', 'POST', selectedFile, handleProfileImageUploadResponse, 'mdl-spinner-profile-image', contentType);
 }
 
 function handleProfileImageUploadResponse(status, message) {
@@ -257,7 +298,7 @@ function saveUserProfile() {
 	console.log(formData);
 
 	document.getElementById("mdl-spinner-profile").classList.add('is-active');
-	makeRequest('dashboard/profile/edit', 'POST', JSON.stringify(formData), handleProfileSaveResponse, 'mdl-spinner-profile');
+	makeRequest('/account/profile/edit', 'POST', JSON.stringify(formData), handleProfileSaveResponse, 'mdl-spinner-profile');
 }
 
 /**

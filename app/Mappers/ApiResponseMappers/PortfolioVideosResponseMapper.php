@@ -18,6 +18,7 @@ class PortfolioVideosResponseMapper implements IMapper
             $portfolioVideoDictionary = [ ];
             $portfolioVideoDictionary ['videoId'] = array_get($attr, 'videoId', NULL);
             $portfolioVideoDictionary ['videoUrl'] = array_get($attr, 'videoUrl', NULL);
+            $portfolioVideoDictionary ['videoScreenUrl'] = array_get($attr, 'videoScreenUrl', NULL);
             $portfolioVideoDictionary ['caption'] = array_get($attr, 'caption', NULL);
 
             $out [$key] = $portfolioVideoDictionary;
