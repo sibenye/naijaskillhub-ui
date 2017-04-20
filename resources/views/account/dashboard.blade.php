@@ -34,7 +34,7 @@
           <div class="nsh-card-content nsh-dashboard-card-content">
           <p><a href="{{ route('edit-portfolio-images') }}">Portfolio Images - {{ $viewBag['user']['portfolioSummary']['numberOfImages'] }}</a></p>
           <p><a href="{{ route('edit-portfolio-audios') }}">Portfolio Audios - {{ $viewBag['user']['portfolioSummary']['numberOfAudios'] }}</a></p>
-          <p><a href="#">Portfolio Videos - {{ $viewBag['user']['portfolioSummary']['numberOfVideos'] }}</a></p>
+          <p><a href="{{ route('edit-portfolio-videos') }}">Portfolio Videos - {{ $viewBag['user']['portfolioSummary']['numberOfVideos'] }}</a></p>
           </div>
       </div>
   </div>

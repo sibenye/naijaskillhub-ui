@@ -17,6 +17,7 @@ use App\Mappers\ApiResponseMappers\AttributesResponseMapper;
 use App\Mappers\ApiResponseMappers\PortfoliosResponseMapper;
 use App\Mappers\ApiResponseMappers\PortfolioImagesResponseMapper;
 use App\Mappers\ApiResponseMappers\PortfolioAudiosResponseMapper;
+use App\Mappers\ApiResponseMappers\PortfolioVideosResponseMapper;
 
 class ApiService
 {
@@ -310,6 +311,26 @@ class ApiService
 
     /**
      *
+     * @param int $userId
+     * @return array
+     */
+    public function getUserVideoPortfolio($userId)
+    {
+        $endpoint = 'users/' . $userId . '/portfolios/videos';
+
+        $response = $this->sendRequest($endpoint, [ ], 'GET');
+
+        if (!array_key_exists('error', $response)) {
+            $portfoliosMapper = new PortfolioVideosResponseMapper();
+            $mappedResponse = $portfoliosMapper->map($response ['videos']);
+            return $mappedResponse;
+        }
+
+        return $response;
+    }
+
+    /**
+     *
      * @param string $image
      * @param string $contentType
      * @param string $authToken
@@ -407,6 +428,36 @@ class ApiService
     }
 
     /**
+     *
+     * @param int $userId
+     * @param string $authToken
+     * @param string $videoUrl
+     * @param string $caption
+     * @param integer $videoId
+     */
+    public function savePortfolioVideoMetaData($userId, $authToken, $caption, $videoUrl = NULL,
+            $videoScreenUrl = NULL, $videoId = NULL)
+    {
+        $endpoint = '/users/' . $userId . '/portfolios/videos';
+        $headerOptions = $this->buildAuthHeader($authToken);
+        $params = [ ];
+        $params ['caption'] = $caption;
+
+        if (!empty($videoScreenUrl)) {
+            $params ['videoScreenUrl'] = $videoScreenUrl;
+        }
+
+        if (!empty($videoUrl)) {
+            $params ['videoUrl'] = $videoUrl;
+        }
+        if (!empty($videoId)) {
+            $params ['videoId'] = $videoId;
+        }
+
+        return $this->sendRequest($endpoint, $params, 'POST', $headerOptions, true);
+    }
+
+    /**
      * Delete a user's portfolio image.
      *
      * @param int $imageId
@@ -432,6 +483,21 @@ class ApiService
     public function deleteUserPortfolioAudio($audioId, $userId, $authToken)
     {
         $endpoint = '/users/' . $userId . '/portfolios/audios?audioId=' . $audioId;
+        $headerOptions = $this->buildAuthHeader($authToken);
+        $params = [ ];
+
+        return $this->sendRequest($endpoint, $params, 'DELETE', $headerOptions);
+    }
+
+    /**
+     *
+     * @param int $videoId
+     * @param int $userId
+     * @param string $authToken
+     */
+    public function deleteUserPortfolioVideo($videoId, $userId, $authToken)
+    {
+        $endpoint = '/users/' . $userId . '/portfolios/videos?videoId=' . $videoId;
         $headerOptions = $this->buildAuthHeader($authToken);
         $params = [ ];
 

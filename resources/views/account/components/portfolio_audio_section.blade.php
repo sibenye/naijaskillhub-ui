@@ -14,9 +14,9 @@
                                 <audio id="audio-{{ $audio['audioId'] }}" src="{{ $audio['fileSrc'] }}" controls></audio>
                             </div>
                             <div class="col-md-5 col-xs-12">
-                                <span>{{ $audio['caption'] }}</span>
+                                <figcaption>{{ $audio['caption'] }}</figcaption>
                             </div>
-                            <div class="col-md-2 col-xs-12">
+                            <div id="audioBlockFooter" class="col-md-2 col-xs-12">
                                     <div class="col-xs-6"><span onclick="deletePortfolioAudio({{ $audio['audioId'] }})"><i class="material-icons">&#xE92B;</i></span></div>
                                     <div class="col-xs-6"><span onclick="editPortfolioAudio({{ $audio['audioId'] }})"><i class="material-icons">&#xE3C9;</i></span></div>
                             </div>

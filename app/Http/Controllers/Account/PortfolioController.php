@@ -6,6 +6,10 @@ use App\Services\Account\PortfolioService;
 use App\Http\Requests\PortfolioImageAddRequest;
 use App\Http\Requests\PortfolioImageEditRequest;
 use Illuminate\Http\Request;
+use App\Http\Requests\PortfolioAudioEditRequest;
+use App\Http\Requests\PortfolioAudioAddRequest;
+use App\Http\Requests\PortfolioVideoAddRequest;
+use App\Http\Requests\PortfolioVideoEditRequest;
 
 /**
  *
@@ -75,6 +79,23 @@ class PortfolioController extends Controller
     }
 
     /**
+     * Show the portfolio videos edit page.
+     *
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function showVideos()
+    {
+        $videos = $this->portfolioService->getUserVideoPortfolio();
+        $viewBag = [
+                'videos' => $videos
+        ];
+        return view('account.portfolio_videos_edit',
+                [
+                        'viewBag' => $viewBag
+                ]);
+    }
+
+    /**
      * Show new portfolio image page.
      *
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
@@ -94,6 +115,18 @@ class PortfolioController extends Controller
     public function addPortfolioAudio()
     {
         return view('account.portfolio_audio_add', [
+                'viewBag' => [ ]
+        ]);
+    }
+
+    /**
+     * Show new portfolio video page.
+     *
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function addPortfolioVideo()
+    {
+        return view('account.portfolio_video_add', [
                 'viewBag' => [ ]
         ]);
     }
@@ -127,12 +160,26 @@ class PortfolioController extends Controller
     }
 
     /**
-     * Save portfolio image.
+     * Show edit single portfolio video page.
+     *
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function editPortfolioVideo($videoId)
+    {
+        $portfolioVideo = $this->portfolioService->getUserVideoPortfolio($videoId);
+        return view('account.portfolio_video_edit',
+                [
+                        'viewBag' => $portfolioVideo [0]
+                ]);
+    }
+
+    /**
+     * create portfolio image.
      *
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function savePortfolioImage(PortfolioImageAddRequest $request)
+    public function createPortfolioImage(PortfolioImageAddRequest $request)
     {
         $image = $request->file('image', NULL);
         $caption = $request->input('caption');
@@ -149,19 +196,15 @@ class PortfolioController extends Controller
     }
 
     /**
-     * Save portfolio audio.
+     * create portfolio audio.
      *
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function savePortfolioAudio(PortfolioAudioAddRequest $request)
+    public function createPortfolioAudio(PortfolioAudioAddRequest $request)
     {
         $audio = $request->file('audio', NULL);
         $caption = $request->input('caption');
-
-        $file = $audio->getClientOriginalName();
-        $mime = $audio->getMimeType();
-        $ext = $audio->getExtension();
 
         $response = $this->portfolioService->saveUserPortfolioAudio($audio, $caption);
 
@@ -171,7 +214,29 @@ class PortfolioController extends Controller
             return back()->withInput();
         }
 
-        return redirect()->route('account');
+        return redirect()->route('edit-portfolio-audios');
+    }
+
+    /**
+     * create portfolio video.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function createPortfolioVideo(PortfolioVideoAddRequest $request)
+    {
+        $videoUrl = $request->input('videoUrl', NULL);
+        // $caption = $request->input('caption', "");
+
+        $response = $this->portfolioService->upsertUserPorfolioVideo(NULL, $videoUrl);
+
+        if (array_key_exists('error', $response)) {
+
+            $request->session()->flash('requestError', $response ['error']);
+            return back()->withInput();
+        }
+
+        return redirect()->route('edit-portfolio-videos');
     }
 
     /**
@@ -215,7 +280,29 @@ class PortfolioController extends Controller
             return back()->withInput();
         }
 
-        return redirect()->route('account');
+        return redirect()->route('edit-portfolio-audios');
+    }
+
+    /**
+     * Update Portfolio video.
+     *
+     * @param PortfolioImageEditRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function updatePortfolioVideo(PortfolioVideoEditRequest $request)
+    {
+        $videoId = $request->input('videoId');
+        $caption = $request->input('caption');
+
+        $response = $this->portfolioService->upsertUserPorfolioVideo($caption, NULL, $videoId);
+
+        if (array_key_exists('error', $response)) {
+
+            $request->session()->flash('requestError', $response ['error']);
+            return back()->withInput();
+        }
+
+        return redirect()->route('edit-portfolio-videos');
     }
 
     /**
@@ -242,6 +329,20 @@ class PortfolioController extends Controller
         $audioId = $request->get('audioId');
 
         $response = $this->portfolioService->deleteUserPortfolioAudio($audioId);
+
+        return $response;
+    }
+
+    /**
+     * Delete user's portfolio video.
+     *
+     * @param Request $request
+     */
+    public function deletePortfolioVideo(Request $request)
+    {
+        $videoId = $request->get('videoId');
+
+        $response = $this->portfolioService->deleteUserPortfolioVideo($videoId);
 
         return $response;
     }

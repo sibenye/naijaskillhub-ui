@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\UploadedFile;
 use App\Utilities\DropboxClientWrapper;
+use App\Services\ApiWrapper\YoutubeApiService;
 
 class PortfolioService
 {
@@ -21,10 +22,18 @@ class PortfolioService
      */
     private $dropboxClient;
 
-    public function __construct(ApiService $apiService, DropboxClientWrapper $dropboxClient)
+    /**
+     *
+     * @var YoutubeApiService
+     */
+    private $youtubeApiService;
+
+    public function __construct(ApiService $apiService, DropboxClientWrapper $dropboxClient,
+            YoutubeApiService $youtubeApiService)
     {
         $this->apiService = $apiService;
         $this->dropboxClient = $dropboxClient;
+        $this->youtubeApiService = $youtubeApiService;
     }
 
     public function getUserImagePortfolio($imageId = NULL)
@@ -91,6 +100,39 @@ class PortfolioService
         }
 
         return $portfolioAudios;
+    }
+
+    public function getUserVideoPortfolio($videoId = NULL)
+    {
+        $userId = Auth::user()->getAuthIdentifier();
+
+        $response = $this->apiService->getUserVideoPortfolio($userId);
+
+        if (array_key_exists('error', $response)) {
+            return $response;
+        }
+
+        $portfolioVideos = $this->mapPortfolioVideoResponse($response);
+
+        if (!empty($videoId)) {
+            $found = false;
+            $videoRequested = [ ];
+            foreach ($portfolioVideos as $portfolioVideo) {
+                if ($portfolioVideo ['videoId'] == $videoId) {
+                    $found = true;
+                    $videoRequested [0] = $portfolioVideo;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                abort(404);
+            }
+
+            return $videoRequested;
+        }
+
+        return $portfolioVideos;
     }
 
     public function getUserPortfolio()
@@ -196,8 +238,6 @@ class PortfolioService
         }
 
         $response = [ ];
-        $response ['imageId'] = $metadataResponse ['imageId'];
-        $response ['caption'] = $metadataResponse ['caption'];
 
         return $response;
     }
@@ -221,8 +261,38 @@ class PortfolioService
         }
 
         $response = [ ];
-        $response ['audioId'] = $metadataResponse ['audioId'];
-        $response ['caption'] = $metadataResponse ['caption'];
+
+        return $response;
+    }
+
+    /**
+     *
+     * @param string $videoUrl
+     * @param string $caption
+     * @param integer $videoId
+     * @return array
+     */
+    public function upsertUserPorfolioVideo($caption = NULL, $videoUrl = NULL, $videoId = NULL)
+    {
+        $userId = Auth::user()->getAuthIdentifier();
+        $authToken = session('nsh_authToken');
+        $videoScreenUrl = NULL;
+
+        if (!empty($videoUrl)) {
+            // determine the video screen url and caption
+            $params = $this->getVideoScreenUrlAndCaption($videoUrl);
+            $videoScreenUrl = $params ['videoScreenUrl'];
+            $caption = $params ['caption'];
+        }
+
+        $metadataResponse = $this->apiService->savePortfolioVideoMetaData($userId, $authToken,
+                $caption, $videoUrl, $videoScreenUrl, $videoId);
+
+        if (array_key_exists('error', $metadataResponse)) {
+            return $metadataResponse;
+        }
+
+        $response = [ ];
 
         return $response;
     }
@@ -265,6 +335,25 @@ class PortfolioService
         return $response;
     }
 
+    /**
+     * Delete user's portfolio video.
+     *
+     * @param int $videoId
+     */
+    public function deleteUserPortfolioVideo($videoId)
+    {
+        $userId = Auth::user()->getAuthIdentifier();
+        $authToken = session('nsh_authToken');
+
+        $response = $this->apiService->deleteUserPortfolioVideo($videoId, $userId, $authToken);
+
+        if ($response == null) {
+            $response = [ ];
+        }
+
+        return $response;
+    }
+
     private function savePortfolioImageMetadata($caption, $imageId)
     {
         $userId = Auth::user()->getAuthIdentifier();
@@ -298,6 +387,9 @@ class PortfolioService
             $videosResponse [$key] ['videoId'] = $value ['videoId'];
             $videosResponse [$key] ['caption'] = $value ['caption'];
             $videosResponse [$key] ['videoUrl'] = $value ['videoUrl'];
+            $videosResponse [$key] ['videoScreenUrl'] = $this->dropboxClient->getFileSource(
+                    $value ['videoScreenUrl']);
+            $videosResponse [$key] ['videoSrc'] = $this->getVideoSource($value ['videoUrl']);
         }
 
         return $videosResponse;
@@ -331,4 +423,107 @@ class PortfolioService
 
         return $creditsResponse;
     }
+
+    private function getVideoScreenUrlAndCaption($videoUrl)
+    {
+        $videoScreenUrl = env('DEFAULT_VIDEO_SCREEN');
+        $videoTitle = '';
+        $params = [
+                'videoScreenUrl' => $videoScreenUrl,
+                'caption' => $videoTitle
+        ];
+        if (empty($videoUrl)) {
+            return $params;
+        }
+
+        $videoType = $this->getVideoType($videoUrl);
+        $vid = $this->getYoutubeOrVimeoVideoId($videoUrl);
+
+        if (!empty($vid)) {
+            // determine if the video is from youtube or vemeo.
+            if ($videoType == 'youtube') {
+                try {
+                    $result = $this->youtubeApiService->getVideoData($vid);
+                    if (!empty($result)) {
+                        $params ['videoScreenUrl'] = $result ['items'] [0] ['snippet'] ['thumbnails'] ['medium'] ['url'];
+                        $params ['caption'] = $result ['items'] [0] ['snippet'] ['title'];
+                    }
+                } catch ( \Exception $ex ) {
+                    Log::error('Error getting youtube video meta data. Error: ' . $ex);
+                }
+            } else if ($videoType == 'vimeo') {
+                try {
+                    $result = unserialize(
+                            file_get_contents("http://vimeo.com/api/v2/video/" . $vid . ".php"));
+
+                    $params ['videoScreenUrl'] = $result [0] ['thumbnail_medium'];
+                    $params ['caption'] = $result [0] ['title'];
+                } catch ( \Exception $ex ) {
+                    Log::error('Error getting vimeo video meta data. Error: ' . $ex);
+                }
+            }
+        }
+
+        return $params;
+    }
+
+    private function getVideoSource($videoUrl)
+    {
+        $videoSource = "";
+        if (empty($videoUrl)) {
+            return $videoSource;
+        }
+
+        $videoType = $this->getVideoType($videoUrl);
+        $vid = $this->getYoutubeOrVimeoVideoId($videoUrl);
+
+        // determine if the video is from youtube or vemeo.
+        if ($videoType == 'youtube') {
+            if (!empty($vid)) {
+                $videoSource = "https://www.youtube.com/embed/" . $vid . "?rel=0&amp;showinfo=0";
+            }
+        } else if ($videoType == 'vimeo') {
+            if (!empty($vid)) {
+                $videoSource = "https://player.vimeo.com/video/" . $vid .
+                         "?color=ffffff&byline=0&portrait=0";
+            }
+        }
+
+        return $videoSource;
+    }
+
+    private function getVideoType($videoUrl)
+    {
+        $videoType = NULL;
+
+        if (preg_match("/www.youtube/i", $videoUrl)) {
+            $videoType = 'youtube';
+        } else if (preg_match("/vimeo.com/i", $videoUrl)) {
+            $videoType = 'vimeo';
+        }
+
+        return $videoType;
+    }
+
+    private function getYoutubeOrVimeoVideoId($videoUrl)
+    {
+        $videoType = $this->getVideoType($videoUrl);
+        $vid = NULL;
+
+        if ($videoType == 'youtube') {
+            $matches = [ ];
+            if (preg_match("/[\\?&]v=([^&#]*)/i", $videoUrl, $matches)) {
+                $vid = $matches [1];
+            }
+        } else if ($videoType == 'vimeo') {
+            $matches = [ ];
+            if (preg_match("/vimeo\.com\/([^&#]*)/i", $videoUrl, $matches)) {
+                $vid = $matches [1];
+            }
+        }
+
+        return $vid;
+    }
 }
+
+

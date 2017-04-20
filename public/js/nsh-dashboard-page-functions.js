@@ -79,6 +79,7 @@
 var httpRequest;
 var imageIdForDelete = null;
 var audioIdForDelete = null;
+var videoIdForDelete = null;
 
 /* define event listeners */
 
@@ -94,6 +95,13 @@ if (document.getElementById("portfolioImageUploadSelection") != undefined) {
 
 /* define event listeners - end */
 
+/* edit portfolio video */
+editPortfolioVideo = function editPortfolioVideo(videoId) {
+	//just go to the edit page
+	goTo("/account/portfolio/video/edit/" + videoId);
+};
+/* edit portfolio video - end */
+
 /* edit portfolio audio */
 editPortfolioAudio = function editPortfolioAudio(audioId) {
 	//just go to the edit page
@@ -107,6 +115,39 @@ editPortfolioImage = function editPortfolioImage(imageId) {
 	goTo("/account/portfolio/image/edit/" + imageId);
 };
 /* edit portfolio image - end */
+
+/* delete portfolio video */
+deletePortfolioVideo = function deletePortfolioVideo(videoId) {
+	var data = { videoId: videoId };
+	videoIdForDelete = videoId;
+	var endpoint = '/account/portfolio/video?videoId=' + videoId;
+	//start spinner
+	startGlobalSpinner();
+	makeRequest(endpoint, 'DELETE', null, handlePortfolioVideoDeleteResponse, null);
+};
+
+function handlePortfolioVideoDeleteResponse(status, message) {
+
+	if (status === 'success') {
+		console.log(message);
+		//remove video block
+		removeVideoBlock(videoIdForDelete);
+	} else {
+		console.error(message);
+	}
+	audioIdForDelete = null;
+	stopGlobalSpinner();
+}
+
+function removeVideoBlock(videoId) {
+	if (videoId !== null) {
+		var videoList = document.getElementById('portfolioVideoList');
+		var videoBlock = document.getElementById('videoBlock-' + videoId);
+		videoList.removeChild(videoBlock);
+	}
+}
+
+/* delete portfolio video - end */
 
 /* delete portfolio audio */
 deletePortfolioAudio = function deletePortfolioAudio(audioId) {
