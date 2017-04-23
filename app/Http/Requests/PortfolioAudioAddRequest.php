@@ -24,7 +24,7 @@ class PortfolioAudioAddRequest extends FormRequest
     public function rules()
     {
         return [
-                'audio' => 'required|mimes:mpga,mp3,wav|max:4048',
+                'audio' => 'required|mimes:mpga,mp3,wav|max:5120',
                 'caption' => 'max:80'
         ];
     }

@@ -24,7 +24,7 @@ class PortfolioImageAddRequest extends FormRequest
     public function rules()
     {
         return [
-                'image' => 'required|mimes:jpeg,jpg,png,gif,bmp|max:2048',
+                'image' => 'required|mimes:jpeg,jpg,png,gif,bmp|max:5120',
                 'caption' => 'max:150'
         ];
     }
