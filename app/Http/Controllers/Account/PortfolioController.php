@@ -185,11 +185,13 @@ class PortfolioController extends Controller
         $image = $request->file('image', NULL);
         $caption = $request->input('caption');
 
-        $mime = $image->getMimeType();
-        $ext = $image->extension();
+        Log::info('ERROR: ' . $image->getError());
+        Log::info('ERROR_MESSAGE: ' . $image->getErrorMessage());
+        // $mime = $image->getMimeType();
+        // $ext = $image->extension();
 
-        Log::info('MIME: ' . $mime);
-        Log::info('EXT: ' . $ext);
+        // Log::info('MIME: ' . $mime);
+        // Log::info('EXT: ' . $ext);
 
         $response = $this->portfolioService->saveUserPortfolioImage($image, $caption);
 
