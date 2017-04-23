@@ -10,6 +10,7 @@ use App\Http\Requests\PortfolioAudioEditRequest;
 use App\Http\Requests\PortfolioAudioAddRequest;
 use App\Http\Requests\PortfolioVideoAddRequest;
 use App\Http\Requests\PortfolioVideoEditRequest;
+use Illuminate\Support\Facades\Log;
 
 /**
  *
@@ -179,10 +180,16 @@ class PortfolioController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function createPortfolioImage(PortfolioImageAddRequest $request)
+    public function createPortfolioImage(Request $request)
     {
         $image = $request->file('image', NULL);
         $caption = $request->input('caption');
+
+        $mime = $image->getMimeType();
+        $ext = $image->extension();
+
+        Log::info('MIME: ' . $mime);
+        Log::info('EXT: ' . $ext);
 
         $response = $this->portfolioService->saveUserPortfolioImage($image, $caption);
 

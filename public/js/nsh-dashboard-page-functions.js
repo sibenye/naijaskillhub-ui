@@ -186,7 +186,7 @@ function removeAudioBlock(audioId) {
 deletePortfolioImage = function deletePortfolioImage(imageId) {
 	var data = { imageId: imageId };
 	imageIdForDelete = imageId;
-	var endpoint = 'portfolio/image?imageId=' + imageId;
+	var endpoint = '/account/portfolio/image?imageId=' + imageId;
 	//start spinner
 	startGlobalSpinner();
 	makeRequest(endpoint, 'DELETE', null, handlePortfolioImageDeleteResponse, null);
