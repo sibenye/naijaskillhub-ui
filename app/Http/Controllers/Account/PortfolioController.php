@@ -180,18 +180,10 @@ class PortfolioController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function createPortfolioImage(Request $request)
+    public function createPortfolioImage(PortfolioImageAddRequest $request)
     {
         $image = $request->file('image', NULL);
         $caption = $request->input('caption');
-
-        Log::info('ERROR: ' . $image->getError());
-        Log::info('ERROR_MESSAGE: ' . $image->getErrorMessage());
-        // $mime = $image->getMimeType();
-        // $ext = $image->extension();
-
-        // Log::info('MIME: ' . $mime);
-        // Log::info('EXT: ' . $ext);
 
         $response = $this->portfolioService->saveUserPortfolioImage($image, $caption);
 
